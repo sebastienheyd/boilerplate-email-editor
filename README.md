@@ -30,6 +30,37 @@ php artisan migrate
 ## Sending an e-mail
 
 ```php
-$data = ['firstname' => 'John', 'lastname' => 'Doe']
+use Sebastienheyd\BoilerplateEmailEditor\Models\Email;
+// ...
+$data = ['firstname' => 'John', 'lastname' => 'Doe'];
 Email::find(1)->send('email@tld.com', $data);
+```
+
+If needed, you can force another layout by passing his id in the `$data` array :
+
+```php
+$data = ['layout_id' => 2, 'firstname' => 'John', 'lastname' => 'Doe'];
+```
+
+## Package update
+
+Laravel Boilerplate E-mail Editor comes with assets such as Javascript, CSS, and images. Since you typically will need to overwrite the assets
+every time the package is updated, you may use the ```--force``` flag :
+
+```
+php artisan vendor:publish --provider="Sebastienheyd\BoilerplateEmailEditor\BoilerplateEmailEditorServiceProvider"
+```
+
+To auto update assets each time package is updated, you can add this command to `post-autoload-dump` into the 
+file `composer.json` at the root of your project.
+ 
+
+```json
+{
+    "scripts": {
+        "post-autoload-dump": [
+            "@php artisan vendor:publish --provider=\"Sebastienheyd\\BoilerplateEmailEditor\\BoilerplateEmailEditorServiceProvider\" --tag=public --force -q"
+        ]
+    }
+}
 ```
