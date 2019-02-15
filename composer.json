@@ -1,0 +1,30 @@
+{
+    "name": "sebastienheyd/boilerplate-email-editor",
+    "description": "E-mail editor for Boilerplate",
+    "keywords": ["laravel", "boilerplate", "email", "mail", "e-mail", "editor"],
+    "type": "library",
+    "require": {
+        "sebastienheyd/boilerplate": "^5.7.3",
+        "sebastienheyd/boilerplate-media-manager": "dev-master"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastien HEYD",
+            "email": "contact@sheyd.fr"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Sebastienheyd\\BoilerplateEmailEditor\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sebastienheyd\\BoilerplateEmailEditor\\BoilerplateEmailEditorServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
