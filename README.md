@@ -48,7 +48,7 @@ Laravel Boilerplate E-mail Editor comes with assets such as Javascript, CSS, and
 every time the package is updated, you may use the ```--force``` flag :
 
 ```
-php artisan vendor:publish --provider="Sebastienheyd\BoilerplateEmailEditor\BoilerplateEmailEditorServiceProvider"
+php artisan vendor:publish --provider="Sebastienheyd\BoilerplateEmailEditor\BoilerplateEmailEditorServiceProvider" --tag=public --force
 ```
 
 To auto update assets each time package is updated, you can add this command to `post-autoload-dump` into the 
