@@ -42,7 +42,7 @@ If needed, you can force another layout by passing his id in the `$data` array :
 $data = ['layout_id' => 2, 'firstname' => 'John', 'lastname' => 'Doe'];
 ```
 
-## Package update
+## Package update
 
 Laravel Boilerplate E-mail Editor comes with assets such as Javascript, CSS, and images. Since you typically will need to overwrite the assets
 every time the package is updated, you may use the ```--force``` flag :
