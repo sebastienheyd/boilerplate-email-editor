@@ -113,8 +113,10 @@ class EmailController extends Controller
      */
     private function parseContent($content)
     {
+        $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
+
         // Retrieve content
-        $html = new \DOMDocument();
+        $html = new \DOMDocument('1.0', 'utf-8');
         @$html->loadHTML($content);
 
         try {
@@ -123,12 +125,9 @@ class EmailController extends Controller
             };
 
             $content = $innerHtml($html->getElementById('mceEditableContent'));
-        } catch(\Exception $e) {
-        }
-
-        $content = htmlentities($content, null, 'utf-8');
-        $content = str_replace("&nbsp;", " ", $content);
-        $content = html_entity_decode($content);
+        } catch(\Exception $e) {}
+        
+        $content = urldecode($content);
 
         return trim($content);
     }

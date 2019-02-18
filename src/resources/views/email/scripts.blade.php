@@ -78,16 +78,25 @@
         function loadMCE() {
             $('#content').tinymce({
                 language: 'fr',
-                plugins: ["autoresize, image, link, code"],
+                plugins: ["autoresize,image,link,code"],
                 toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
                 object_resizing: false,
                 image_advtab: true,
-                relative_urls: false,
                 remove_script_host: true,
                 removed_menuitems: 'newdocument',
                 forced_root_block: "",
                 branding: false,
+                visual: false,
+                verify_html:false,
                 browser_spellcheck: true,
+                entity_encoding : "raw",
+                encoding: "UTF-8",
+                relative_urls: false,
+                convert_urls: false,
+                link_class_list: [
+                    {title: '-', value: ''},
+                    {title: 'Button', value: 'btn'},
+                ],
                 content_style: 'body {overflow-x:hidden;padding-bottom:0 !important;}',
                 init_instance_callback: function (editor) {
                     loadLayout(editor);
