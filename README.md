@@ -31,9 +31,13 @@ php artisan migrate
 
 ```php
 use Sebastienheyd\BoilerplateEmailEditor\Models\Email;
-// ...
+
+// By id
 $data = ['firstname' => 'John', 'lastname' => 'Doe'];
 Email::find(1)->send('email@tld.com', $data);
+
+// Or by slug
+Email::findBySlug('my_slug')->send('email@tld.com', $data);
 ```
 
 If needed, you can force another layout by passing his id in the `$data` array :

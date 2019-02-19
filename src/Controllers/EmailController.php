@@ -79,11 +79,13 @@ class EmailController extends Controller
             'label'        => 'required',
             'subject'      => 'required',
             'content'      => 'required',
-            'sender_email' => 'nullable|email'
+            'sender_email' => 'nullable|email',
+            'slug'         => 'unique:emails,slug'
         ], [], [
             'subject'      => __('boilerplate-email-editor::email.subject'),
             'label'        => __('boilerplate-email-editor::email.label'),
-            'sender_email' => __('boilerplate-email-editor::email.sender_email')
+            'sender_email' => __('boilerplate-email-editor::email.sender_email'),
+            'slug'         => __('boilerplate-email-editor::email.slug')
         ]);
 
         $email = Email::create($request->all());
@@ -125,8 +127,9 @@ class EmailController extends Controller
             };
 
             $content = $innerHtml($html->getElementById('mceEditableContent'));
-        } catch(\Exception $e) {}
-        
+        } catch(\Exception $e) {
+        }
+
         $content = urldecode($content);
 
         return trim($content);
@@ -178,11 +181,13 @@ class EmailController extends Controller
             'label'        => 'required',
             'subject'      => 'required',
             'content'      => 'required',
-            'sender_email' => 'nullable|email'
+            'sender_email' => 'nullable|email',
+            'slug'         => 'unique:emails,slug,'.$id
         ], [], [
             'subject'      => __('boilerplate-email-editor::email.subject'),
             'label'        => __('boilerplate-email-editor::email.label'),
-            'sender_email' => __('boilerplate-email-editor::email.sender_email')
+            'sender_email' => __('boilerplate-email-editor::email.sender_email'),
+            'slug'         => __('boilerplate-email-editor::email.slug')
         ]);
 
         $email = Email::findOrFail($id);

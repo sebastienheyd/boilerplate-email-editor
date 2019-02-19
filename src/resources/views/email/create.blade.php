@@ -71,6 +71,12 @@
                         {!! $errors->first('description','<p class="text-danger"><strong>:message</strong></p>') !!}
                     </div>
                     <div class="form-group">
+                        {{ Form::label('slug', __('boilerplate-email-editor::email.Slug')) }}
+                        {{ Form::text('slug', old('slug'), ['class' => 'form-control'.($errors->has('slug') ? ' is-invalid' : '')]) }}
+                        <small class="text-muted">{{ __('boilerplate-email-editor::email.Slug_tip') }}</small>
+                        {!! $errors->first('slug','<p class="text-danger"><strong>:message</strong></p>') !!}
+                    </div>
+                    <div class="form-group">
                         {{ Form::label('layout_id', __('boilerplate-email-editor::email.Layout')) }}
                         {{ Form::select('layout_id', [0 => '-'] + $layouts, old('layout_id'), ['class' => 'form-control'.($errors->has('layout_id') ? ' is-invalid' : '')]) }}
                         {!! $errors->first('layout_id','<p class="text-danger"><strong>:message</strong></p>') !!}

@@ -17,12 +17,26 @@ use Mail;
 class Email extends Model
 {
     protected $table = 'emails';
-    protected $fillable = ['label', 'layout_id', 'description', 'subject', 'content', 'sender_name', 'sender_email'];
+    protected $fillable = [
+        'label',
+        'slug',
+        'layout_id',
+        'description',
+        'subject',
+        'content',
+        'sender_name',
+        'sender_email'
+    ];
     public $timestamps = false;
 
     public function layout()
     {
         return $this->belongsTo(EmailLayout::class);
+    }
+
+    static public function findBySlug($slug)
+    {
+        return self::whereSlug($slug)->firstOrFail();
     }
 
     public function render($data = [], $emptyVariableError = true)

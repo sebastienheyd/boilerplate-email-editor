@@ -33,4 +33,7 @@ return [
     'Sender_name'   => "Name of the sender",
     'ifNameEmpty'   => "If empty, use the default name",
     'ifAdressEmpty' => "If empty, use the default address",
+    'Slug'          => "Slug",
+    'slug'          => "slug",
+    'Slug_tip'      => "Unique identifier to retrieve the e-mail"
 ];

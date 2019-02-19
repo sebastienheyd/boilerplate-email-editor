@@ -33,4 +33,7 @@ return [
     'Sender_name'   => "Nom de l'expéditeur",
     'ifNameEmpty'   => "Si vide, utilise le nom par défaut",
     'ifAdressEmpty' => "Si vide, utilise l'adresse par défaut",
+    'slug'          => "slug",
+    'Slug'          => "Slug",
+    'Slug_tip'      => "Identifiant unique permettant de récupérer l'e-mail"
 ];

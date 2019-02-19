@@ -26,6 +26,7 @@
                 <thead>
                 <tr>
                     <th>{{ __('boilerplate-email-editor::email.id') }}</th>
+                    <th>{{ __('boilerplate-email-editor::email.Slug') }}</th>
                     <th>{{ __('boilerplate-email-editor::email.Label') }}</th>
                     <th>{{ __('boilerplate-email-editor::email.Description') }}</th>
                     <th>{{ __('boilerplate-email-editor::email.actions') }}</th>
@@ -50,6 +51,7 @@
                 },
                 columns: [
                     {data: 'id', name: 'id', width : '70px'},
+                    {data: 'slug', name: 'slug', width : '120px'},
                     {data: 'label', name: 'label', searchable: true},
                     {data: 'description', name: 'description', searchable: true},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false, width : '110px'}
