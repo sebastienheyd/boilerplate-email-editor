@@ -36,7 +36,10 @@ class Email extends Mailable
 
         $this->html($email->render($this->data))
             ->subject($email->subject)
-            ->from($email->sender_email ?? config('mail.from.address'), $email->sender_name ?? config('mail.from.name'));
+            ->from(
+                $email->sender_email ?? config('mail.from.address'),
+                $email->sender_name ?? config('mail.from.name')
+            );
 
         return $this;
     }

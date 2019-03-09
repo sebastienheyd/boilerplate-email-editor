@@ -1,6 +1,4 @@
-<?php
-
-namespace Sebastienheyd\BoilerplateEmailEditor\Facades;
+<?php namespace Sebastienheyd\BoilerplateEmailEditor\Facades;
 
 class Blade extends \Illuminate\Support\Facades\Blade
 {
@@ -15,12 +13,16 @@ class Blade extends \Illuminate\Support\Facades\Blade
 
         try {
             eval('?>'.$php);
-        } catch(\Exception $e) {
-            if(!$emptyVariableError && preg_match("#^Undefined variable: (.*)#", $e->getMessage(), $m)) {
-                while(ob_get_level() > $obLevel) ob_end_clean();
+        } catch (\Exception $e) {
+            if (!$emptyVariableError && preg_match("#^Undefined variable: (.*)#", $e->getMessage(), $m)) {
+                while (ob_get_level() > $obLevel) {
+                    ob_end_clean();
+                }
                 return self::get($string, $data + [$m[1] => '$'.$m[1]], $emptyVariableError);
             } else {
-                while(ob_get_level() > $obLevel) ob_end_clean();
+                while (ob_get_level() > $obLevel) {
+                    ob_end_clean();
+                }
                 throw $e;
             }
         }

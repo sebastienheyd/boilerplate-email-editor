@@ -40,10 +40,13 @@ class EmailLayoutController extends Controller
     {
         return Datatables::of(EmailLayout::select('*'))
             ->rawColumns(['actions'])
-            ->editColumn('actions', function($layout) {
-                $b = '<a href="'.route('emaileditor.layout.show', $layout->id).'" class="btn btn-default btn-sm mrs" target="_blank"><i class="fa fa-eye"></i></a>';
-                $b .= '<a href="'.route('emaileditor.layout.edit', $layout->id).'" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
-                $b .= '<a href="'.route('emaileditor.layout.destroy', $layout->id).'" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
+            ->editColumn('actions', function ($layout) {
+                $b = '<a href="'.route('emaileditor.layout.show', $layout->id).
+                    '" class="btn btn-default btn-sm mrs" target="_blank"><i class="fa fa-eye"></i></a>';
+                $b .= '<a href="'.route('emaileditor.layout.edit', $layout->id).
+                    '" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
+                $b .= '<a href="'.route('emaileditor.layout.destroy', $layout->id).
+                    '" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
                 return $b;
             })->make(true);
     }
@@ -105,14 +108,14 @@ class EmailLayoutController extends Controller
      */
     public function getMce(Request $request)
     {
-        if(class_exists('Debugbar')) {
+        if (class_exists('Debugbar')) {
             \Debugbar::disable();
         }
 
         $content = $request->input('content', '');
         $layout = EmailLayout::find($request->input('id'));
 
-        if($layout !== null) {
+        if ($layout !== null) {
             $content = [
                 'sender_email' => $request->input('sender_email') ?? config('mail.from.address'),
                 'sender_name'  => $request->input('sender_name') ?? config('mail.from.name'),
@@ -185,7 +188,7 @@ class EmailLayoutController extends Controller
     public function previewEmail(Request $request)
     {
         $to = $request->user();
-        if(!empty($request->input('email', ''))) {
+        if (!empty($request->input('email', ''))) {
             $to = $request->input('email');
         }
 
@@ -221,7 +224,7 @@ class EmailLayoutController extends Controller
 
         $content = Blade::get($content, [], false);
 
-        if(empty($content)) {
+        if (empty($content)) {
             abort(404);
         }
         return response($content, 200)->header('Content-Type', 'text/html');

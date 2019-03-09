@@ -41,10 +41,13 @@ class EmailController extends Controller
     {
         return Datatables::of(Email::select('*'))
             ->rawColumns(['actions'])
-            ->editColumn('actions', function($email) {
-                $b = '<a href="'.route('emaileditor.email.show', $email->id).'" class="btn btn-default btn-sm mrs" target="_blank"><i class="fa fa-eye"></i></a>';
-                $b .= '<a href="'.route('emaileditor.email.edit', $email->id).'" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
-                $b .= '<a href="'.route('emaileditor.email.destroy', $email->id).'" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
+            ->editColumn('actions', function ($email) {
+                $b = '<a href="'.route('emaileditor.email.show', $email->id).
+                    '" class="btn btn-default btn-sm mrs" target="_blank"><i class="fa fa-eye"></i></a>';
+                $b .= '<a href="'.route('emaileditor.email.edit', $email->id).
+                    '" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
+                $b .= '<a href="'.route('emaileditor.email.destroy', $email->id).
+                    '" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
                 return $b;
             })->make(true);
     }
@@ -122,12 +125,12 @@ class EmailController extends Controller
         @$html->loadHTML($content);
 
         try {
-            $innerHtml = function($node) {
+            $innerHtml = function ($node) {
                 return implode(array_map([$node->ownerDocument, "saveHTML"], iterator_to_array($node->childNodes)));
             };
 
             $content = $innerHtml($html->getElementById('mceEditableContent'));
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
         }
 
         $content = urldecode($content);
@@ -226,7 +229,7 @@ class EmailController extends Controller
         $content = Blade::get($this->parseContent($request->input('content')), $data, false);
         $layout = EmailLayout::find($request->input('layout_id'));
 
-        if($layout !== null) {
+        if ($layout !== null) {
             $data['content'] = $content;
             $content = $layout->render($data, false)->getContent();
         }
@@ -268,7 +271,7 @@ class EmailController extends Controller
         $content = Blade::get($this->parseContent($request->session()->get('content')), $data, false);
         $layout = EmailLayout::find($request->session()->get('layout_id'));
 
-        if($layout !== null) {
+        if ($layout !== null) {
             $data['content'] = $content;
             $content = $layout->render($data, false)->getContent();
         }

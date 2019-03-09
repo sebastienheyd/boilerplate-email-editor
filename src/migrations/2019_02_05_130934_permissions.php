@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -27,7 +27,7 @@ class Permissions extends Migration
     public function up()
     {
         // Insert default permissions
-        foreach($this->permissions as $permission) {
+        foreach ($this->permissions as $permission) {
             $permission['created_at'] = date('Y-m-d H:i:s');
             $permission['updated_at'] = date('Y-m-d H:i:s');
             DB::table('permissions')->insert($permission);
@@ -42,7 +42,7 @@ class Permissions extends Migration
     public function down()
     {
         foreach ($this->permissions as $permission) {
-            DB::table('permissions')->where('name', $permission[ 'name' ])->delete();
+            DB::table('permissions')->where('name', $permission['name'])->delete();
         }
     }
 }

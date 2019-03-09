@@ -34,7 +34,7 @@ class Email extends Model
         return $this->belongsTo(EmailLayout::class);
     }
 
-    static public function findBySlug($slug)
+    public static function findBySlug($slug)
     {
         return self::whereSlug($slug)->firstOrFail();
     }
@@ -47,11 +47,11 @@ class Email extends Model
         $content = Blade::get($this->content, $data, $emptyVariableError);
 
         $layout = $this->layout;
-        if(isset($data['layout_id'])) {
+        if (isset($data['layout_id'])) {
             $layout = EmailLayout::find($data['layout_id']);
         }
 
-        if($layout !== null) {
+        if ($layout !== null) {
             $data['content'] = $content;
             return $layout->render($data, $emptyVariableError)->getContent();
         }

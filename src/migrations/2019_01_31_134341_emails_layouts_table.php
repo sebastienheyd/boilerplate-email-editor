@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,7 +13,7 @@ class EmailsLayoutsTable extends Migration
      */
     public function up()
     {
-        Schema::create('emails_layouts', function(Blueprint $table) {
+        Schema::create('emails_layouts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('label');
             $table->longText('content');

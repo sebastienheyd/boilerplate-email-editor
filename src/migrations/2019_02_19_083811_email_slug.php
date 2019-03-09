@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,7 +13,7 @@ class EmailSlug extends Migration
      */
     public function up()
     {
-        Schema::table('emails', function(Blueprint $table) {
+        Schema::table('emails', function (Blueprint $table) {
             $table->string('slug')->unique()->nullable()->after('id');
         });
     }
@@ -25,7 +25,7 @@ class EmailSlug extends Migration
      */
     public function down()
     {
-        Schema::table('emails', function(Blueprint $table) {
+        Schema::table('emails', function (Blueprint $table) {
             $table->dropColumn('slug');
         });
     }

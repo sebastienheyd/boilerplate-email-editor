@@ -40,7 +40,7 @@
                 </tr>
                 <tr>
                     <td class="bg-white header">
-                        <a href="{{ route('fo.homepage') }}" target="_blank" class="logo">
+                        <a href="{{ url('/') }}" target="_blank" class="logo">
                             {{ config('app.name') }}
                         </a>
                     </td>

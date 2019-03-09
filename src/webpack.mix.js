@@ -17,8 +17,10 @@ mix.scripts([
     'node_modules/codemirror/addon/edit/matchtags.js',
 ], 'public/vendor/codemirror/codemirror.min.js').version();
 
-mix.styles('node_modules/codemirror/lib/codemirror.css',
-    'public/vendor/codemirror/codemirror.min.css').version();
+mix.styles(
+    'node_modules/codemirror/lib/codemirror.css',
+    'public/vendor/codemirror/codemirror.min.css'
+).version();
 
 // ======= TinyMCE
 

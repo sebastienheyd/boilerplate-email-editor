@@ -13,7 +13,7 @@ class BoilerplateEmailEditorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([ __DIR__.'/public' => public_path('assets/vendor/boilerplate-email-editor')], 'public');
+        $this->publishes([__DIR__.'/public' => public_path('assets/vendor/boilerplate-email-editor')], 'public');
 
         // If routes file has been published, load routes from the published file
         $routesPath = base_path('routes/boilerplate-email-editor.php');
@@ -32,10 +32,11 @@ class BoilerplateEmailEditorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        config([
-            'boilerplate.menu.providers' => array_merge(
-                config('boilerplate.menu.providers'), [
-                    \Sebastienheyd\BoilerplateEmailEditor\Menu\BoilerplateEmailEditor::class])
-        ]);
+        $config = array_merge(
+            config('boilerplate.menu.providers'),
+            [ \Sebastienheyd\BoilerplateEmailEditor\Menu\BoilerplateEmailEditor::class ]
+        );
+
+        config(['boilerplate.menu.providers' => $config]);
     }
 }
