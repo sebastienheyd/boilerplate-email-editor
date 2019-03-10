@@ -1,6 +1,6 @@
 {
     "name": "sebastienheyd/boilerplate-email-editor",
-    "description": "E-mail editor for Boilerplate",
+    "description": "E-mail visual editor for sebastienheyd/boilerplate",
     "keywords": ["laravel", "boilerplate", "email", "mail", "e-mail", "editor"],
     "type": "library",
     "require": {
