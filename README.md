@@ -1,7 +1,7 @@
 # Laravel Boilerplate E-mail Editor
 
 ![Package](https://img.shields.io/badge/Package-sebastienheyd%2Fboilerplate--email--editor-lightgrey.svg)
-![Laravel](https://img.shields.io/badge/Laravel-5.7.x-green.svg)
+![Laravel](https://img.shields.io/badge/Laravel-6.x-green.svg)
 ![MIT License](https://img.shields.io/github/license/sebastienheyd/boilerplate.svg)
 
 This package will add a e-mail management tool to [`sebastienheyd/boilerplate`](https://github.com/sebastienheyd/boilerplate).
