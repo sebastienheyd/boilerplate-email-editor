@@ -7,4 +7,5 @@
     <rule ref="PSR2" />
     <exclude-pattern>*/src/public/*$</exclude-pattern>
     <exclude-pattern>*/src/resources/*$</exclude-pattern>
+    <exclude-pattern>*/src/node_modules/*$</exclude-pattern>
 </ruleset>
