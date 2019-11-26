@@ -4,8 +4,8 @@
     "keywords": ["laravel", "boilerplate", "email", "mail", "e-mail", "editor"],
     "type": "library",
     "require": {
-        "sebastienheyd/boilerplate": "^6.0",
-        "sebastienheyd/boilerplate-media-manager": "^6.0"
+        "sebastienheyd/boilerplate": "^6.1.1|dev-master",
+        "sebastienheyd/boilerplate-media-manager": "^6.0|dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",

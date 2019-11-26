@@ -32,11 +32,6 @@ class BoilerplateEmailEditorServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $config = array_merge(
-            config('boilerplate.menu.providers'),
-            [ \Sebastienheyd\BoilerplateEmailEditor\Menu\BoilerplateEmailEditor::class ]
-        );
-
-        config(['boilerplate.menu.providers' => $config]);
+        app('boilerplate.menu.items')->registerMenuItem(Menu\BoilerplateEmailEditor::class);
     }
 }

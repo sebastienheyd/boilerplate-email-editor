@@ -1,5 +1,5 @@
+@include('boilerplate-media-manager::load.tinymce')
 @push('js')
-    <script src="{{ mix('/vendor/tinymce/tinymce.min.js', '/assets/vendor/boilerplate-email-editor') }}"></script>
     <script>
 
         $(function () {
@@ -20,7 +20,7 @@
                 });
             });
 
-            $('.btn-preview').on('click', function(e){
+            $('.btn-preview').on('click', function (e) {
                 e.preventDefault();
 
                 $.ajax({
@@ -48,7 +48,7 @@
                         }
                     },
                     callback: function (result) {
-                        if(result !== null) {
+                        if (result !== null) {
                             $.ajax({
                                 url: '{{ route('emaileditor.email.preview.email') }}',
                                 type: 'post',
@@ -77,49 +77,26 @@
 
         function loadMCE() {
             $('#content').tinymce({
-                language: 'fr',
-                plugins: ["autoresize,image,link,code"],
+                plugins: $.merge(tinymce.defaultSettings.plugins, ["noneditable"]),
                 toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
-                object_resizing: false,
-                image_advtab: true,
-                remove_script_host: true,
                 removed_menuitems: 'newdocument',
-                forced_root_block: "",
-                branding: false,
-                visual: false,
-                verify_html:false,
-                browser_spellcheck: true,
-                entity_encoding : "raw",
-                encoding: "UTF-8",
+                remove_script_host: true,
+                object_resizing: false,
+                entity_encoding: "raw",
                 relative_urls: false,
                 convert_urls: false,
+                visual: false,
+                verify_html: false,
                 link_class_list: [
                     {title: '-', value: ''},
                     {title: 'Button', value: 'btn'},
                 ],
                 content_style: 'body {overflow-x:hidden;padding-bottom:0 !important;}',
+                code_change_callback: function (editor) {
+                    $('#layout_id').trigger('change');
+                },
                 init_instance_callback: function (editor) {
                     loadLayout(editor);
-                },
-                file_picker_callback: function (callback, value, meta) {
-                    tinymce.activeEditor.windowManager.open({
-                        file: '{{ route('mediamanager.mce', [], false) }}?type=' + meta.filetype,
-                        title: 'File Manager',
-                        width: Math.round(window.innerWidth * 0.8),
-                        height: Math.round(window.innerHeight * 0.8)
-                    }, {
-                        oninsert: function (file) {
-                            if (meta.filetype === 'image') {
-                                callback(file.url, {alt: file.name});
-                            }
-
-                            if (meta.filetype === 'file') {
-                                callback(file.url, {text: file.name, title: file.name});
-                            }
-                        }
-                    });
-
-                    return false;
                 }
             });
         }
@@ -139,7 +116,7 @@
                 }
             });
 
-            if($('#layout_id').val() !== '0') {
+            if ($('#layout_id').val() !== '0') {
                 tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
             }
         }

@@ -1,5 +1,8 @@
+@include('boilerplate::load.codemirror', ['theme' => 'storm'])
 @push('js')
     <script>
+        var myCodeMirror = $('#body').codemirror();
+
         $('.btn-preview').on('click', function () {
             $.ajax({
                 url: '{{ route('emaileditor.layout.preview') }}',
@@ -21,11 +24,15 @@
                     }
                 },
                 callback: function (result) {
-                    if(result !== null) {
+                    if (result !== null) {
                         $.ajax({
                             url: '{{ route('emaileditor.layout.preview.email') }}',
                             type: 'post',
-                            data: {label: $('input[name="label"]').val(), content: myCodeMirror.getValue(), email: result},
+                            data: {
+                                label: $('input[name="label"]').val(),
+                                content: myCodeMirror.getValue(),
+                                email: result
+                            },
                             success: function () {
                                 growl("{{ __('boilerplate-email-editor::editor.mail-success') }}", 'success')
                             }

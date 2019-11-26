@@ -48,5 +48,4 @@
     {!! Form::close() !!}
 @endsection
 
-@include('boilerplate-email-editor::load.codemirror', ['id' => 'body'])
 @include('boilerplate-email-editor::layout.scripts')
