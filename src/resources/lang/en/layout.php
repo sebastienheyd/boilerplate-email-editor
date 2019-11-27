@@ -1,11 +1,11 @@
 <?php
 
 return [
-    'title'         => "Templates",
+    'title'         => 'Templates',
     'list'          => 'List of templates',
     'add'           => 'Add a template',
-    'add.title'     => "Adding a template",
-    'edit.title'    => "Editing a template",
+    'add.title'     => 'Adding a template',
+    'edit.title'    => 'Editing a template',
     'backtolist'    => 'List of templates',
     'id'            => 'Id',
     'label'         => 'label',
