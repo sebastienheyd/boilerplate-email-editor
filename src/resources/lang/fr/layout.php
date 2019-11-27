@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title'         => "Gabarits",
+    'title'         => 'Gabarits',
     'list'          => 'Liste des gabarits',
     'add'           => 'Ajouter un gabarit',
     'add.title'     => "Ajout d'un gabarit",

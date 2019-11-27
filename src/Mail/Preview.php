@@ -23,6 +23,7 @@ class Preview extends Mailable
     public function subject($subject)
     {
         $subject = '[PREVIEW] '.$subject;
+
         return parent::subject($subject);
     }
 

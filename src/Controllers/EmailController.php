@@ -3,12 +3,12 @@
 namespace Sebastienheyd\BoilerplateEmailEditor\Controllers;
 
 use App\Http\Controllers\Controller;
-use Sebastienheyd\BoilerplateEmailEditor\Mail\Preview;
-use Sebastienheyd\BoilerplateEmailEditor\Models\Email;
-use Sebastienheyd\BoilerplateEmailEditor\Facades\Blade;
+use DataTables;
 use Illuminate\Http\Request;
 use Mail;
-use DataTables;
+use Sebastienheyd\BoilerplateEmailEditor\Facades\Blade;
+use Sebastienheyd\BoilerplateEmailEditor\Mail\Preview;
+use Sebastienheyd\BoilerplateEmailEditor\Models\Email;
 use Sebastienheyd\BoilerplateEmailEditor\Models\EmailLayout;
 
 class EmailController extends Controller
@@ -32,10 +32,11 @@ class EmailController extends Controller
     }
 
     /**
-     * Get listing of emails for datatable
+     * Get listing of emails for datatable.
+     *
+     * @throws \Exception
      *
      * @return mixed
-     * @throws \Exception
      */
     public function datatable()
     {
@@ -48,6 +49,7 @@ class EmailController extends Controller
                     '" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
                 $b .= '<a href="'.route('emaileditor.email.destroy', $email->id).
                     '" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
+
                 return $b;
             })->make(true);
     }
@@ -61,6 +63,7 @@ class EmailController extends Controller
     {
         $userEmail = $request->user()->email;
         $layouts = EmailLayout::all()->pluck('label', 'id')->toArray();
+
         return view('boilerplate-email-editor::email.create', compact('userEmail', 'layouts'));
     }
 
@@ -69,9 +72,9 @@ class EmailController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -83,12 +86,12 @@ class EmailController extends Controller
             'subject'      => 'required',
             'content'      => 'required',
             'sender_email' => 'nullable|email',
-            'slug'         => 'unique:emails,slug'
+            'slug'         => 'unique:emails,slug',
         ], [], [
             'subject'      => __('boilerplate-email-editor::email.subject'),
             'label'        => __('boilerplate-email-editor::email.label'),
             'sender_email' => __('boilerplate-email-editor::email.sender_email'),
-            'slug'         => __('boilerplate-email-editor::email.slug')
+            'slug'         => __('boilerplate-email-editor::email.slug'),
         ]);
 
         $email = Email::create($request->all());
@@ -98,7 +101,7 @@ class EmailController extends Controller
     }
 
     /**
-     * Parse e-mail content
+     * Parse e-mail content.
      *
      * @param Request $request
      *
@@ -110,7 +113,7 @@ class EmailController extends Controller
     }
 
     /**
-     * Parse e-mail content from layout html
+     * Parse e-mail content from layout html.
      *
      * @param $content
      *
@@ -126,7 +129,7 @@ class EmailController extends Controller
 
         try {
             $innerHtml = function ($node) {
-                return implode(array_map([$node->ownerDocument, "saveHTML"], iterator_to_array($node->childNodes)));
+                return implode(array_map([$node->ownerDocument, 'saveHTML'], iterator_to_array($node->childNodes)));
             };
 
             $content = $innerHtml($html->getElementById('mceEditableContent'));
@@ -141,7 +144,7 @@ class EmailController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  integer $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -151,9 +154,9 @@ class EmailController extends Controller
     }
 
     /**
-     * Show the form for editing email layout
+     * Show the form for editing email layout.
      *
-     * @param integer $id
+     * @param int     $id
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -163,17 +166,19 @@ class EmailController extends Controller
         $email = Email::findOrFail($id);
         $layouts = EmailLayout::all()->pluck('label', 'id')->toArray();
         $userEmail = $request->user()->email;
+
         return view('boilerplate-email-editor::email.edit', compact('email', 'layouts', 'userEmail'));
     }
 
     /**
-     * Update email layout in database
+     * Update email layout in database.
      *
      * @param Request $request
-     * @param integer $id
+     * @param int     $id
+     *
+     * @throws \Illuminate\Validation\ValidationException
      *
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, $id)
     {
@@ -185,12 +190,12 @@ class EmailController extends Controller
             'subject'      => 'required',
             'content'      => 'required',
             'sender_email' => 'nullable|email',
-            'slug'         => 'unique:emails,slug,'.$id
+            'slug'         => 'unique:emails,slug,'.$id,
         ], [], [
             'subject'      => __('boilerplate-email-editor::email.subject'),
             'label'        => __('boilerplate-email-editor::email.label'),
             'sender_email' => __('boilerplate-email-editor::email.sender_email'),
-            'slug'         => __('boilerplate-email-editor::email.slug')
+            'slug'         => __('boilerplate-email-editor::email.slug'),
         ]);
 
         $email = Email::findOrFail($id);
@@ -203,7 +208,7 @@ class EmailController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param integer $id
+     * @param int $id
      */
     public function destroy($id)
     {
@@ -211,7 +216,7 @@ class EmailController extends Controller
     }
 
     /**
-     * Send layout preview by mail
+     * Send layout preview by mail.
      *
      * @param Request $request
      *
@@ -223,7 +228,7 @@ class EmailController extends Controller
 
         $data = [
             'sender_email' => $request->input('sender_email') ?? config('mail.from.address'),
-            'sender_name'  => $request->input('sender_name') ?? config('mail.from.name')
+            'sender_name'  => $request->input('sender_name') ?? config('mail.from.name'),
         ];
 
         $content = Blade::get($this->parseContent($request->input('content')), $data, false);
@@ -241,7 +246,7 @@ class EmailController extends Controller
     }
 
     /**
-     * Save preview in session before redirect with js to preview
+     * Save preview in session before redirect with js to preview.
      *
      * @param Request $request
      */
@@ -254,18 +259,19 @@ class EmailController extends Controller
     }
 
     /**
-     * Preview layout in browser
+     * Preview layout in browser.
      *
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function preview(Request $request)
     {
         $data = [
             'sender_email' => $request->session()->get('sender_email'),
-            'sender_name'  => $request->session()->get('sender_name')
+            'sender_name'  => $request->session()->get('sender_name'),
         ];
 
         $content = Blade::get($this->parseContent($request->session()->get('content')), $data, false);

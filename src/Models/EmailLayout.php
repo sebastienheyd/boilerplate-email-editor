@@ -14,6 +14,7 @@ class EmailLayout extends Model
     public function render($data = [], $emptyVariableError = true)
     {
         $content = Blade::get($this->content, $data, $emptyVariableError);
+
         return response($content, 200)->header('Content-Type', 'text/html');
     }
 }

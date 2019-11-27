@@ -3,12 +3,12 @@
 namespace Sebastienheyd\BoilerplateEmailEditor\Controllers;
 
 use App\Http\Controllers\Controller;
-use Sebastienheyd\BoilerplateEmailEditor\Models\EmailLayout;
-use Sebastienheyd\BoilerplateEmailEditor\Mail\Preview;
-use Sebastienheyd\BoilerplateEmailEditor\Facades\Blade;
+use DataTables;
 use Illuminate\Http\Request;
 use Mail;
-use DataTables;
+use Sebastienheyd\BoilerplateEmailEditor\Facades\Blade;
+use Sebastienheyd\BoilerplateEmailEditor\Mail\Preview;
+use Sebastienheyd\BoilerplateEmailEditor\Models\EmailLayout;
 
 class EmailLayoutController extends Controller
 {
@@ -31,10 +31,11 @@ class EmailLayoutController extends Controller
     }
 
     /**
-     * Get listing of email layouts for datatable
+     * Get listing of email layouts for datatable.
+     *
+     * @throws \Exception
      *
      * @return mixed
-     * @throws \Exception
      */
     public function datatable()
     {
@@ -47,6 +48,7 @@ class EmailLayoutController extends Controller
                     '" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
                 $b .= '<a href="'.route('emaileditor.layout.destroy', $layout->id).
                     '" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
+
                 return $b;
             })->make(true);
     }
@@ -60,6 +62,7 @@ class EmailLayoutController extends Controller
     {
         $defaultContent = file_get_contents(view('boilerplate-email-editor::layout.default')->getPath());
         $userEmail = $request->user()->email;
+
         return view('boilerplate-email-editor::layout.create', compact('defaultContent', 'userEmail'));
     }
 
@@ -68,17 +71,18 @@ class EmailLayoutController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         $this->validate($request, [
             'label'   => 'required',
-            'content' => 'required'
+            'content' => 'required',
         ], [], [
             'label'   => __('boilerplate-email-editor::layout.label'),
-            'content' => __('boilerplate-email-editor::layout.content')
+            'content' => __('boilerplate-email-editor::layout.content'),
         ]);
 
         $emailLayout = EmailLayout::create($request->all());
@@ -90,7 +94,7 @@ class EmailLayoutController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  integer $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -100,7 +104,7 @@ class EmailLayoutController extends Controller
     }
 
     /**
-     * Get content for TinyMCE
+     * Get content for TinyMCE.
      *
      * @param Request $request
      *
@@ -119,8 +123,9 @@ class EmailLayoutController extends Controller
             $content = [
                 'sender_email' => $request->input('sender_email') ?? config('mail.from.address'),
                 'sender_name'  => $request->input('sender_name') ?? config('mail.from.name'),
-                'content'      => '<div id="mceEditableContent" contenteditable="true">'.$content.'</div>'
+                'content'      => '<div id="mceEditableContent" contenteditable="true">'.$content.'</div>',
             ];
+
             return $layout->render($content, false)->getContent();
         }
 
@@ -128,9 +133,9 @@ class EmailLayoutController extends Controller
     }
 
     /**
-     * Show the form for editing email layout
+     * Show the form for editing email layout.
      *
-     * @param integer $id
+     * @param int     $id
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -139,26 +144,28 @@ class EmailLayoutController extends Controller
     {
         $emailLayout = EmailLayout::findOrFail($id);
         $userEmail = $request->user()->email;
+
         return view('boilerplate-email-editor::layout.edit', compact('emailLayout', 'userEmail'));
     }
 
     /**
-     * Update email layout in database
+     * Update email layout in database.
      *
      * @param Request $request
-     * @param integer $id
+     * @param int     $id
+     *
+     * @throws \Illuminate\Validation\ValidationException
      *
      * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             'label'   => 'required',
-            'content' => 'required'
+            'content' => 'required',
         ], [], [
             'label'   => __('boilerplate-email-editor::layout.label'),
-            'content' => __('boilerplate-email-editor::layout.content')
+            'content' => __('boilerplate-email-editor::layout.content'),
         ]);
 
         $emailLayout = EmailLayout::findOrFail($id);
@@ -171,7 +178,7 @@ class EmailLayoutController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param integer $id
+     * @param int $id
      */
     public function destroy($id)
     {
@@ -179,7 +186,7 @@ class EmailLayoutController extends Controller
     }
 
     /**
-     * Send layout preview by mail
+     * Send layout preview by mail.
      *
      * @param Request $request
      *
@@ -201,7 +208,7 @@ class EmailLayoutController extends Controller
     }
 
     /**
-     * Save preview in session before redirect with js to preview
+     * Save preview in session before redirect with js to preview.
      *
      * @param Request $request
      */
@@ -211,12 +218,13 @@ class EmailLayoutController extends Controller
     }
 
     /**
-     * Preview layout in browser
+     * Preview layout in browser.
      *
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
+     *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function preview(Request $request)
     {
@@ -227,6 +235,7 @@ class EmailLayoutController extends Controller
         if (empty($content)) {
             abort(404);
         }
+
         return response($content, 200)->header('Content-Type', 'text/html');
     }
 }
