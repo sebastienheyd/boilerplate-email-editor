@@ -1,7 +1,7 @@
-<?php // phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+<?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+// phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+
 use Illuminate\Database\Migrations\Migration;
 
 class Permissions extends Migration
@@ -10,13 +10,13 @@ class Permissions extends Migration
         [
             'name'         => 'emaileditor_layout_crud',
             'display_name' => 'boilerplate-email-editor::permissions.layout_crud.display_name',
-            'description'  => 'boilerplate-email-editor::permissions.layout_crud.description'
+            'description'  => 'boilerplate-email-editor::permissions.layout_crud.description',
         ],
         [
             'name'         => 'emaileditor_email_crud',
             'display_name' => 'boilerplate-email-editor::permissions.email_crud.display_name',
-            'description'  => 'boilerplate-email-editor::permissions.email_crud.description'
-        ]
+            'description'  => 'boilerplate-email-editor::permissions.email_crud.description',
+        ],
     ];
 
     /**

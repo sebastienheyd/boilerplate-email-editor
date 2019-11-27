@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title'         => "Gestion des e-mails",
+    'title'         => 'Gestion des e-mails',
     'list'          => 'Liste des e-mails',
     'add'           => 'Ajouter un e-mail',
     'add.title'     => "Ajout d'un e-mail",
@@ -31,9 +31,9 @@ return [
     'sender_email'  => "e-mail de l'expéditeur",
     'Sender_email'  => "E-mail de l'expéditeur",
     'Sender_name'   => "Nom de l'expéditeur",
-    'ifNameEmpty'   => "Si vide, utilise le nom par défaut",
+    'ifNameEmpty'   => 'Si vide, utilise le nom par défaut',
     'ifAdressEmpty' => "Si vide, utilise l'adresse par défaut",
-    'slug'          => "slug",
-    'Slug'          => "Slug",
-    'Slug_tip'      => "Identifiant unique permettant de récupérer l'e-mail"
+    'slug'          => 'slug',
+    'Slug'          => 'Slug',
+    'Slug_tip'      => "Identifiant unique permettant de récupérer l'e-mail",
 ];

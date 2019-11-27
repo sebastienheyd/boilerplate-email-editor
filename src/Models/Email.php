@@ -3,16 +3,14 @@
 namespace Sebastienheyd\BoilerplateEmailEditor\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Mail;
 use Sebastienheyd\BoilerplateEmailEditor\Facades\Blade;
 use Sebastienheyd\BoilerplateEmailEditor\Mail\Email as EmailToSend;
-use Mail;
 
 /**
- * Class Email
+ * Class Email.
  *
  * @property EmailLayout $layout
- *
- * @package Sebastienheyd\BoilerplateEmailEditor\Models
  */
 class Email extends Model
 {
@@ -25,7 +23,7 @@ class Email extends Model
         'subject',
         'content',
         'sender_name',
-        'sender_email'
+        'sender_email',
     ];
     public $timestamps = false;
 
@@ -53,6 +51,7 @@ class Email extends Model
 
         if ($layout !== null) {
             $data['content'] = $content;
+
             return $layout->render($data, $emptyVariableError)->getContent();
         }
 
