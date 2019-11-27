@@ -13,8 +13,6 @@ class BoilerplateEmailEditorServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([__DIR__.'/public' => public_path('assets/vendor/boilerplate-email-editor')], 'public');
-
         // If routes file has been published, load routes from the published file
         $routesPath = base_path('routes/boilerplate-email-editor.php');
         $this->loadRoutesFrom(is_file($routesPath) ? $routesPath : __DIR__.'/routes/boilerplate-email-editor.php');
