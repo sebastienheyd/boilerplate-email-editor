@@ -77,11 +77,8 @@
 
         function loadMCE() {
             $('#content').tinymce({
-                plugins: $.merge(tinymce.defaultSettings.plugins, ["noneditable"]),
-                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
-                removed_menuitems: 'newdocument',
+                plugins: tinymce.defaultSettings.plugins + " noneditable",
                 remove_script_host: true,
-                object_resizing: false,
                 entity_encoding: "raw",
                 relative_urls: false,
                 convert_urls: false,
@@ -89,7 +86,7 @@
                 verify_html: false,
                 link_class_list: [
                     {title: '-', value: ''},
-                    {title: 'Button', value: 'btn'},
+                    {title: 'Button', value: 'btn btn-default'},
                 ],
                 content_style: 'body {overflow-x:hidden;padding-bottom:0 !important;}',
                 code_change_callback: function (editor) {
