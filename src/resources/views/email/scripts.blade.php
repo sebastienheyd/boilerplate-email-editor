@@ -80,6 +80,7 @@
                 plugins: tinymce.defaultSettings.plugins + " noneditable",
                 remove_script_host: true,
                 entity_encoding: "raw",
+                object_resizing: "img",
                 relative_urls: false,
                 convert_urls: false,
                 visual: false,
