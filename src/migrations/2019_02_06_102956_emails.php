@@ -17,16 +17,15 @@ class Emails extends Migration
     {
         Schema::create('emails', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('slug')->unique()->nullable();
             $table->string('label');
             $table->string('sender_name')->nullable();
             $table->string('sender_email')->nullable();
-            $table->integer('layout_id')->unsigned()->index()->nullable();
+            $table->string('layout')->index()->nullable();
             $table->string('description')->nullable();
             $table->string('subject');
             $table->longText('content');
             $table->softDeletes();
-
-            $table->foreign('layout_id')->references('id')->on('emails_layouts');
         });
     }
 

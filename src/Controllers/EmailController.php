@@ -34,20 +34,20 @@ class EmailController extends Controller
     /**
      * Get listing of emails for datatable.
      *
+     * @return mixed
      * @throws \Exception
      *
-     * @return mixed
      */
     public function datatable()
     {
         return Datatables::of(Email::select('*'))
             ->rawColumns(['actions'])
             ->editColumn('actions', function ($email) {
-                $b = '<a href="'.route('emaileditor.email.show', $email->id).
+                $b = '<a href="' . route('emaileditor.email.show', $email->id) .
                     '" class="btn btn-default btn-sm mrs" target="_blank"><i class="fa fa-eye"></i></a>';
-                $b .= '<a href="'.route('emaileditor.email.edit', $email->id).
+                $b .= '<a href="' . route('emaileditor.email.edit', $email->id) .
                     '" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
-                $b .= '<a href="'.route('emaileditor.email.destroy', $email->id).
+                $b .= '<a href="' . route('emaileditor.email.destroy', $email->id) .
                     '" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
 
                 return $b;
@@ -72,9 +72,9 @@ class EmailController extends Controller
      *
      * @param Request $request
      *
+     * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -119,11 +119,17 @@ class EmailController extends Controller
      *
      * @return string
      */
-    private function parseContent($content)
+    private function parseContent($content, $data = [])
     {
         $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
+        $content = preg_replace('`<variable.*?>\[(.*?)]</variable>`', '[$1]', $content);
 
-        // Retrieve content
+        if (!empty($data)) {
+            foreach ($data as $k => $v) {
+                $content = str_replace("[$k]", $v, $content);
+            }
+        }
+
         $html = new \DOMDocument('1.0', 'utf-8');
         @$html->loadHTML($content);
 
@@ -156,7 +162,7 @@ class EmailController extends Controller
     /**
      * Show the form for editing email layout.
      *
-     * @param int     $id
+     * @param int $id
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -164,7 +170,7 @@ class EmailController extends Controller
     public function edit($id, Request $request)
     {
         $email = Email::findOrFail($id);
-        $layouts = EmailLayout::all()->pluck('label', 'id')->toArray();
+        $layouts = EmailLayout::getList();
         $userEmail = $request->user()->email;
 
         return view('boilerplate-email-editor::email.edit', compact('email', 'layouts', 'userEmail'));
@@ -174,11 +180,11 @@ class EmailController extends Controller
      * Update email layout in database.
      *
      * @param Request $request
-     * @param int     $id
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * @param int $id
      *
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
+     *
      */
     public function update(Request $request, $id)
     {
@@ -190,7 +196,7 @@ class EmailController extends Controller
             'subject'      => 'required',
             'content'      => 'required',
             'sender_email' => 'nullable|email',
-            'slug'         => 'unique:emails,slug,'.$id,
+            'slug'         => 'unique:emails,slug,' . $id,
         ], [], [
             'subject'      => __('boilerplate-email-editor::email.subject'),
             'label'        => __('boilerplate-email-editor::email.label'),
@@ -231,12 +237,12 @@ class EmailController extends Controller
             'sender_name'  => $request->input('sender_name') ?? config('mail.from.name'),
         ];
 
-        $content = Blade::get($this->parseContent($request->input('content')), $data, false);
-        $layout = EmailLayout::find($request->input('layout_id'));
+        $content = $this->parseContent($request->input('content'), $data);
+        $layout = $request->input('layout');
 
-        if ($layout !== null) {
+        if (!empty($layout)) {
             $data['content'] = $content;
-            $content = $layout->render($data, false)->getContent();
+            $content = (string)view($layout, $data);
         }
 
         $mail = new Preview($content);
@@ -253,7 +259,7 @@ class EmailController extends Controller
     public function previewPost(Request $request)
     {
         $request->session()->flash('content', $request->input('content'));
-        $request->session()->flash('layout_id', $request->input('layout_id'));
+        $request->session()->flash('layout', $request->input('layout'));
         $request->session()->flash('sender_email', $request->input('sender_email') ?? config('mail.from.address'));
         $request->session()->flash('sender_name', $request->input('sender_name') ?? config('mail.from.name'));
     }
@@ -263,9 +269,9 @@ class EmailController extends Controller
      *
      * @param Request $request
      *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function preview(Request $request)
     {
@@ -274,12 +280,12 @@ class EmailController extends Controller
             'sender_name'  => $request->session()->get('sender_name'),
         ];
 
-        $content = Blade::get($this->parseContent($request->session()->get('content')), $data, false);
-        $layout = EmailLayout::find($request->session()->get('layout_id'));
+        $content = $this->parseContent($request->session()->get('content'), $data);
+        $layout = $request->session()->get('layout');
 
-        if ($layout !== null) {
+        if (!empty($layout)) {
             $data['content'] = $content;
-            $content = $layout->render($data, false)->getContent();
+            return view($layout, $data);
         }
 
         return response($content, 200)->header('Content-Type', 'text/html');

@@ -77,9 +77,9 @@
                         {!! $errors->first('slug','<p class="text-danger"><strong>:message</strong></p>') !!}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('layout_id', __('boilerplate-email-editor::email.Layout')) }}
-                        {{ Form::select('layout_id', [0 => '-'] + $layouts, old('layout_id', $email->layout_id), ['class' => 'form-control'.($errors->has('layout_id') ? ' is-invalid' : '')]) }}
-                        {!! $errors->first('layout_id','<p class="text-danger"><strong>:message</strong></p>') !!}
+                        {{ Form::label('layout', __('boilerplate-email-editor::email.Layout')) }}
+                        {{ Form::select('layout', ['' => '-'] + $layouts, old('layout', $email->layout), ['class' => 'form-control'.($errors->has('layout') ? ' is-invalid' : '')]) }}
+                        {!! $errors->first('layout','<p class="text-danger"><strong>:message</strong></p>') !!}
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                 <div class="box-body">
                     <div class="form-group {{ $errors->has('content') ? 'has-error' : '' }}">
                         {!! $errors->first('content','<p class="text-danger"><strong>:message</strong></p>') !!}
-                        {{ Form::textarea('content', old('content', $email->content), ['class' => 'form-control', 'id' => 'content']) }}
+                        {{ Form::textarea('content', old('content', $email->mce_content), ['class' => 'form-control', 'id' => 'content']) }}
                     </div>
                 </div>
             </div>

@@ -17,12 +17,27 @@ class Preview extends Mailable
      */
     public function __construct($content)
     {
-        $this->content = $content;
+        $html = new \DOMDocument('1.0', 'utf-8');
+        @$html->loadHTML($content);
+
+        $tags = $html->getElementsByTagName('img');
+
+        if (!empty($tags)) {
+            foreach ($tags as $tag) {
+                $src = $tag->getAttribute('src');
+                if (preg_match('`^/`', $src)) {
+                    $tag->setAttribute('src', config('app.url') . $src);
+                    $html->saveHTML($tag);
+                }
+            }
+        }
+
+        $this->content = $html->saveHTML();
     }
 
     public function subject($subject)
     {
-        $subject = '[PREVIEW] '.$subject;
+        $subject = '[PREVIEW] ' . $subject;
 
         return parent::subject($subject);
     }

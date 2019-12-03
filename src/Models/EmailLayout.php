@@ -2,19 +2,46 @@
 
 namespace Sebastienheyd\BoilerplateEmailEditor\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Sebastienheyd\BoilerplateEmailEditor\Facades\Blade;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class EmailLayout extends Model
+class EmailLayout
 {
-    protected $table = 'emails_layouts';
-    protected $fillable = ['label', 'content'];
-    public $timestamps = false;
-
-    public function render($data = [], $emptyVariableError = true)
+    /**
+     * Get e-mail layouts array.
+     *
+     * @return array
+     */
+    public static function getList()
     {
-        $content = Blade::get($this->content, $data, $emptyVariableError);
+        $layouts = collect(Storage::disk('email-layout')->files())->filter(function ($v, $k) {
+            return preg_match('`^(.*?)\.blade\.php$`', $v) != false;
+        })->toArray();
 
-        return response($content, 200)->header('Content-Type', 'text/html');
+        $result = [];
+
+        foreach ($layouts as $layout) {
+            $lines = file(Storage::disk('email-layout')->path($layout));
+            $layout = preg_replace('`\.blade\.php$`', '', $layout);
+
+            if (preg_match('`^{{--(.*?)--}}$`', trim($lines[0]), $m)) {
+                $layoutName = trim($m[1]);
+            } else {
+                $layoutName = ucfirst($layout);
+            }
+
+            $result['email-layout.' . $layout] = $layoutName;
+        }
+
+        if (!isset($result['email-layout.default'])) {
+            $result['boilerplate-email-editor::layout.default'] = 'HTML';
+        }
+
+        ksort($result);
+
+        return $result;
     }
+
+
+
 }

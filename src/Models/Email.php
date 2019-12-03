@@ -18,7 +18,7 @@ class Email extends Model
     protected $fillable = [
         'label',
         'slug',
-        'layout_id',
+        'layout',
         'description',
         'subject',
         'content',
@@ -27,14 +27,16 @@ class Email extends Model
     ];
     public $timestamps = false;
 
-    public function layout()
-    {
-        return $this->belongsTo(EmailLayout::class);
-    }
-
     public static function findBySlug($slug)
     {
         return self::whereSlug($slug)->firstOrFail();
+    }
+
+    public function getMceContentAttribute()
+    {
+        $content = $this->getAttribute('content');
+        $content = preg_replace('`\[([a-zA-Z0-9_-]*)]`', '<variable contenteditable="false">[$1]</variable>', $content);
+        return trim($content);
     }
 
     public function render($data = [], $emptyVariableError = true)

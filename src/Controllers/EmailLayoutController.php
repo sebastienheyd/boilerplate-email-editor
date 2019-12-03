@@ -116,20 +116,19 @@ class EmailLayoutController extends Controller
             \Debugbar::disable();
         }
 
-        $content = $request->input('content', '');
-        $layout = EmailLayout::find($request->input('id'));
+        $content = $request->post('content', '');
 
-        if ($layout !== null) {
-            $content = [
-                'sender_email' => $request->input('sender_email') ?? config('mail.from.address'),
-                'sender_name'  => $request->input('sender_name') ?? config('mail.from.name'),
-                'content'      => '<div id="mceEditableContent" contenteditable="true">'.$content.'</div>',
-            ];
-
-            return $layout->render($content, false)->getContent();
+        if (empty($request->post('view'))) {
+            return $content;
         }
 
-        return $content;
+        $content = [
+            'sender_email' => $request->input('sender_email') ?? config('mail.from.address'),
+            'sender_name'  => $request->input('sender_name') ?? config('mail.from.name'),
+            'content'      => sprintf('<div id="mceEditableContent" contenteditable="true">%s</div>', $content),
+        ];
+
+        return view($request->post('view'), $content);
     }
 
     /**

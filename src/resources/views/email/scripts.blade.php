@@ -6,7 +6,7 @@
 
             loadMCE();
 
-            $('#layout_id').on('change', function () {
+            $('#layout').on('change', function () {
                 $.ajax({
                     url: '{{ route('emaileditor.email.content') }}',
                     type: 'post',
@@ -28,7 +28,7 @@
                     type: 'post',
                     data: {
                         content: $("#content").tinymce().getContent(),
-                        layout_id: $('#layout_id').val(),
+                        layout: $('#layout').val(),
                         sender_email: $('#sender_email').val(),
                         sender_name: $('#sender_name').val()
                     },
@@ -54,7 +54,7 @@
                                 type: 'post',
                                 data: {
                                     content: $("#content").tinymce().getContent(),
-                                    layout_id: $('#layout_id').val(),
+                                    layout: $('#layout').val(),
                                     email: result,
                                     subject: $('#subject').val(),
                                     sender_email: $('#sender_email').val(),
@@ -79,19 +79,43 @@
             $('#content').tinymce({
                 plugins: tinymce.defaultSettings.plugins + " noneditable",
                 remove_script_host: true,
-                entity_encoding: "raw",
                 object_resizing: "img",
                 relative_urls: false,
                 convert_urls: false,
                 visual: false,
                 verify_html: false,
+                toolbar1: tinymce.defaultSettings.toolbar,
+                toolbar2: 'insertVar',
+                table_toolbar: '',
                 link_class_list: [
                     {title: '-', value: ''},
                     {title: 'Button', value: 'btn btn-default'},
                 ],
-                content_style: 'body {overflow-x:hidden;padding-bottom:0 !important;}',
+                content_style: 'body{overflow-x:hidden}variable{background:#F0F0F0;cursor:not-allowed}',
+                setup: function (editor) {
+                    editor.ui.registry.addButton('insertVar', {
+                        text: '{{ __('boilerplate-email-editor::email.insert_var') }}',
+                        disabled: true,
+                        onAction: function (_) {
+                            bootbox.prompt("{{ __('boilerplate-email-editor::email.var_name') }}", function (result) {
+                                if(result === null) { return null; }
+                                editor.insertContent('<variable contenteditable="false">[' + result + ']</variable>');
+                            });
+                        },
+                        onSetup: function (button) {
+                            var editorEventCallback = function (e) {
+                                button.setDisabled(e.element.nodeName.toLowerCase() === 'variable');
+                            };
+                            editor.on('NodeChange', editorEventCallback);
+
+                            return function () {
+                                editor.off('NodeChange', editorEventCallback);
+                            };
+                        }
+                    });
+                },
                 code_change_callback: function (editor) {
-                    $('#layout_id').trigger('change');
+                    $('#layout').trigger('change');
                 },
                 init_instance_callback: function (editor) {
                     loadLayout(editor);
@@ -105,7 +129,7 @@
                 type: 'post',
                 data: {
                     content: editor.getContent(),
-                    id: $('#layout_id').val(),
+                    view: $('#layout').val(),
                     sender_email: $('#sender_email').val(),
                     sender_name: $('#sender_name').val()
                 },

@@ -8,7 +8,7 @@
         #outlook a {padding:0}
         body{width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;margin:0;padding:0;background:#efefef;font-family:Arial,Verdana,sans-serif}
         #backgroundTable {margin:0;padding:0;width:100% !important;line-height:100% !important}
-        img {outline:none;text-decoration:none;-ms-interpolation-mode: bicubic}
+        img {outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;max-width:100%;height:auto}
         a img {border:none}
         p {margin:1em 0}
         table td {border-collapse:collapse}
