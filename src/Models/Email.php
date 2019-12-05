@@ -34,6 +34,7 @@ class Email extends Model
     {
         $content = $this->getAttribute('content');
         $content = preg_replace('`\[([a-zA-Z0-9_-]*)]`', '<variable contenteditable="false">[$1]</variable>', $content);
+
         return trim($content);
     }
 
@@ -52,10 +53,9 @@ class Email extends Model
             $content = str_replace("[$k]", $v, $content);
         }
 
-
         if (!empty($this->getAttribute('layout'))) {
             $data['content'] = $content;
-            $content = (string)view($this->getAttribute('layout'), $data);
+            $content = (string) view($this->getAttribute('layout'), $data);
         }
 
         return response($this->minify($content), 200)->header('Content-Type', 'text/html');

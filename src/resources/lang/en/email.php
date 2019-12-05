@@ -35,5 +35,5 @@ return [
     'slug'          => 'slug',
     'Slug_tip'      => 'Unique identifier to retrieve the e-mail',
     'insert_var'    => 'Insert a variable',
-    'var_name'      => 'Variable name'
+    'var_name'      => 'Variable name',
 ];

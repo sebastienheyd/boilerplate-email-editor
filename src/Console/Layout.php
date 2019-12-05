@@ -40,17 +40,17 @@ class Layout extends Command
     public function handle()
     {
         $label = mb_convert_case($this->argument('name'), MB_CASE_TITLE);
-        $name = Str::snake($this->argument('name')) . '.blade.php';
+        $name = Str::snake($this->argument('name')).'.blade.php';
         $storage = Storage::disk('email-layouts');
 
         if ($storage->exists($name)) {
-            return $this->error('Layout ' . $storage->path($name) . ' already exist');
+            return $this->error('Layout '.$storage->path($name).' already exist');
         }
 
-        $content = "{{-- $label --}}" . PHP_EOL;
-        $content .= file_get_contents(__DIR__ . '/../resources/views/layout/default.blade.php');
+        $content = "{{-- $label --}}".PHP_EOL;
+        $content .= file_get_contents(__DIR__.'/../resources/views/layout/default.blade.php');
         $storage->put($name, $content);
 
-        return $this->info('Layout ' . $storage->path($name) . ' has been generated');
+        return $this->info('Layout '.$storage->path($name).' has been generated');
     }
 }
