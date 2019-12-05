@@ -4,7 +4,8 @@
     <arg name="colors"/>
     <arg value="p"/>
     <file>src</file>
-    <rule ref="PSR12" />
+    <rule ref="PSR2">
+    </rule>
     <exclude-pattern>*/src/public/*$</exclude-pattern>
     <exclude-pattern>*/src/resources/*$</exclude-pattern>
     <exclude-pattern>*/src/node_modules/*$</exclude-pattern>
