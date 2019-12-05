@@ -7,7 +7,6 @@ use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mail;
-use Sebastienheyd\BoilerplateEmailEditor\Facades\Blade;
 use Sebastienheyd\BoilerplateEmailEditor\Mail\Preview;
 use Sebastienheyd\BoilerplateEmailEditor\Models\Email;
 use Sebastienheyd\BoilerplateEmailEditor\Models\EmailLayout;
@@ -35,9 +34,9 @@ class EmailController extends Controller
     /**
      * Get listing of emails for datatable.
      *
-     * @return mixed
      * @throws \Exception
      *
+     * @return mixed
      */
     public function datatable()
     {
@@ -46,13 +45,13 @@ class EmailController extends Controller
             ->editColumn(
                 'actions',
                 function ($email) {
-                    $b = '<a href="'.route('emaileditor.email.show', $email->id).
+                    $b = '<a href="' . route('emaileditor.email.show', $email->id) .
                         '" class="btn btn-default btn-sm mrs" target="_blank"><i class="fa fa-eye"></i></a>';
-                    $b .= '<a href="'.route('emaileditor.email.edit', $email->id).
+                    $b .= '<a href="' . route('emaileditor.email.edit', $email->id) .
                         '" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
 
                     if (Auth::user()->ability('admin', 'emaileditor_email_dev')) {
-                        $b .= '<a href="'.route('emaileditor.email.destroy', $email->id).
+                        $b .= '<a href="' . route('emaileditor.email.destroy', $email->id) .
                             '" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
                     }
 
@@ -83,9 +82,9 @@ class EmailController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -194,11 +193,11 @@ class EmailController extends Controller
      * Update email layout in database.
      *
      * @param Request $request
-     * @param int $id
+     * @param int     $id
      *
-     * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
@@ -221,7 +220,7 @@ class EmailController extends Controller
                 'subject'      => 'required',
                 'content'      => 'required',
                 'sender_email' => 'nullable|email',
-                'unique:emails,slug,'.$id
+                'unique:emails,slug,' . $id,
             ],
             [],
             [
@@ -300,9 +299,9 @@ class EmailController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Exception
      *
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function preview(Request $request)
     {

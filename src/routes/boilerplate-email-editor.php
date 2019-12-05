@@ -1,7 +1,7 @@
 <?php
 
 $default = [
-    'prefix'     => config('boilerplate.app.prefix', '').'/email-editor',
+    'prefix'     => config('boilerplate.app.prefix', '') . '/email-editor',
     'domain'     => config('boilerplate.app.domain', ''),
     'middleware' => ['web', 'boilerplatelocale', 'boilerplateauth', 'ability:admin,backend_access'],
     'as'         => 'emaileditor.',

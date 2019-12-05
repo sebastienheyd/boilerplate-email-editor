@@ -8,7 +8,8 @@ use Illuminate\Queue\SerializesModels;
 
 class Preview extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new message instance.
@@ -26,7 +27,7 @@ class Preview extends Mailable
             foreach ($tags as $tag) {
                 $src = $tag->getAttribute('src');
                 if (preg_match('`^/`', $src)) {
-                    $tag->setAttribute('src', config('app.url') . $src);
+                    $tag->setAttribute('src', config('app.url').$src);
                     $html->saveHTML($tag);
                 }
             }
@@ -37,7 +38,7 @@ class Preview extends Mailable
 
     public function subject($subject)
     {
-        $subject = '[PREVIEW] ' . $subject;
+        $subject = '[PREVIEW] '.$subject;
 
         return parent::subject($subject);
     }

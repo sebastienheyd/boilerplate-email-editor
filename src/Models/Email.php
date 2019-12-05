@@ -42,8 +42,8 @@ class Email extends Model
         $data = [
             'sender_name'  => $data['sender_name'] ?? $this->getAttribute('sender_name') ?? config('mail.from.name'),
             'sender_email' => $data['sender_email'] ?? $this->getAttribute('sender_email') ?? config(
-                    'mail.from.address'
-                ),
+                'mail.from.address'
+            ),
         ];
 
         $content = $this->getAttribute('content');

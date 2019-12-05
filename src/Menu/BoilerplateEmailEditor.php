@@ -15,6 +15,5 @@ class BoilerplateEmailEditor
             ->id('emaileditor')
             ->activeIfRoute('emaileditor.*')
             ->order(900);
-
     }
 }

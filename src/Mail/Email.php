@@ -9,7 +9,8 @@ use Sebastienheyd\BoilerplateEmailEditor\Models\Email as EmailModel;
 
 class Email extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     private $id;
     private $data;

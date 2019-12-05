@@ -31,7 +31,7 @@ class EmailLayout
                 $layoutName = ucfirst($layout);
             }
 
-            $result['email-layouts.'.$layout] = $layoutName;
+            $result['email-layouts.' . $layout] = $layoutName;
         }
 
         if (!isset($result['email-template.default'])) {
@@ -42,6 +42,4 @@ class EmailLayout
 
         return $result;
     }
-
-
 }
