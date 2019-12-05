@@ -21,7 +21,7 @@ class Emails extends Migration
             $table->string('label');
             $table->string('sender_name')->nullable();
             $table->string('sender_email')->nullable();
-            $table->string('layout')->index()->nullable();
+            $table->string('template')->index()->nullable();
             $table->string('description')->nullable();
             $table->string('subject');
             $table->longText('content');

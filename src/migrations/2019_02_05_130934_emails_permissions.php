@@ -4,18 +4,18 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class Permissions extends Migration
+class EmailsPermissions extends Migration
 {
     private $permissions = [
         [
-            'name'         => 'emaileditor_layout_crud',
-            'display_name' => 'boilerplate-email-editor::permissions.layout_crud.display_name',
-            'description'  => 'boilerplate-email-editor::permissions.layout_crud.description',
+            'name'         => 'emaileditor_email_edition',
+            'display_name' => 'boilerplate-email-editor::permissions.email_edition.display_name',
+            'description'  => 'boilerplate-email-editor::permissions.email_edition.description',
         ],
         [
-            'name'         => 'emaileditor_email_crud',
-            'display_name' => 'boilerplate-email-editor::permissions.email_crud.display_name',
-            'description'  => 'boilerplate-email-editor::permissions.email_crud.description',
+            'name'         => 'emaileditor_email_dev',
+            'display_name' => 'boilerplate-email-editor::permissions.email_dev.display_name',
+            'description'  => 'boilerplate-email-editor::permissions.email_dev.description',
         ],
     ];
 

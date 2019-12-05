@@ -6,7 +6,7 @@
 
             loadMCE();
 
-            $('#layout').on('change', function () {
+            $('[name=layout]').on('change', function () {
                 $.ajax({
                     url: '{{ route('emaileditor.email.content') }}',
                     type: 'post',
@@ -28,7 +28,7 @@
                     type: 'post',
                     data: {
                         content: $("#content").tinymce().getContent(),
-                        layout: $('#layout').val(),
+                        layout: $('[name=layout]').val(),
                         sender_email: $('#sender_email').val(),
                         sender_name: $('#sender_name').val()
                     },
@@ -54,7 +54,7 @@
                                 type: 'post',
                                 data: {
                                     content: $("#content").tinymce().getContent(),
-                                    layout: $('#layout').val(),
+                                    layout: $('[name=layout]').val(),
                                     email: result,
                                     subject: $('#subject').val(),
                                     sender_email: $('#sender_email').val(),
@@ -115,7 +115,7 @@
                     });
                 },
                 code_change_callback: function (editor) {
-                    $('#layout').trigger('change');
+                    $('[name=layout]').trigger('change');
                 },
                 init_instance_callback: function (editor) {
                     loadLayout(editor);
@@ -125,11 +125,11 @@
 
         function loadLayout(editor) {
             $.ajax({
-                url: '{{ route('emaileditor.layout.mce', [], false) }}',
+                url: '{{ route('emaileditor.email.mce', [], false) }}',
                 type: 'post',
                 data: {
                     content: editor.getContent(),
-                    view: $('#layout').val(),
+                    view: $('[name=layout]').val(),
                     sender_email: $('#sender_email').val(),
                     sender_name: $('#sender_name').val()
                 },
@@ -138,7 +138,7 @@
                 }
             });
 
-            if ($('#layout_id').val() !== '0') {
+            if ($('[name=layout]_id').val() !== '0') {
                 tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
             }
         }

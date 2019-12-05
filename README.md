@@ -7,67 +7,79 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sebastienheyd/boilerplate-email-editor/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sebastienheyd/boilerplate-email-editor/?branch=master)
 ![MIT License](https://img.shields.io/github/license/sebastienheyd/boilerplate.svg)
 
-This package will add a e-mail management tool to [`sebastienheyd/boilerplate`](https://github.com/sebastienheyd/boilerplate).
-It allows you to build e-mails for your application.
+This package for [`sebastienheyd/boilerplate`](https://github.com/sebastienheyd/boilerplate) allows developers to manage 
+emails for their applications. It allows you to create layouts and then define editors who will only be able to edit 
+texts without being able to modify the layouts.
 
 ## Installation
 
-1. In order to install Laravel Boilerplate E-mail Editor run :
+1. In order to install Laravel Boilerplate Email Editor run :
 
 ```
 composer require sebastienheyd/boilerplate-email-editor
 ```
 
-2. Run the command below to publish assets, lang files, ...
-
-```
-php artisan vendor:publish --provider="Sebastienheyd\BoilerplateEmailEditor\BoilerplateEmailEditorServiceProvider"
-```
-
-3. After you set your database parameters in your ```.env``` file run :
+2. Then run :
 
 ```
 php artisan migrate
 ```
 
-## Sending an e-mail
+You can go to the admin and start using the email management panel.
+
+## Generating an email layout
+
+Before generating a layout, be aware that there is a default html layout provided with this package.
+
+To generate a new layout, you can use the following artisan command :
+
+```
+php artisan email:layout {name} 
+```
+
+This command will generate a new blade file in the `resources/views/email-layouts` folder.
+
+To change the default folder, change the value of `layouts_path` in the `email-editor` configuration file.
+
+However, you must publish the configuration file in order to do so. To do this, use the following command:
+
+```
+php artisan vendor:publish --provider="Sebastienheyd\BoilerplateEmailEditor\ServiceProvider"
+```
+
+## Defining editors
+
+This package is provided with two permissions that can be used depending on the desired profile.
+
+* Email development : to be reserved for developers, it allows to define the slug, the description and the layout.
+* Email edition : for users who will be able to edit the content of emails.
+
+Permissions and roles are manageable by default with `sebastienheyd/boilerplate`
+
+## Email variables
+
+In the editing of the content of an e-mail, you will find a "Insert a variable" button. This button allows you to insert 
+a variable in the e-mail and make it uneditable.
+
+However, you can also enter the variables by hand by framing them with [ and ].
+
+Example : "Hello [first_name]"
+
+## Sending an email
 
 ```php
 use Sebastienheyd\BoilerplateEmailEditor\Models\Email;
 
-// By id
-$data = ['firstname' => 'John', 'lastname' => 'Doe'];
-Email::find(1)->send('email@tld.com', $data);
+// Setting data
+$data = ['first_name' => 'John', 'last_name' => 'Doe'];
 
-// Or by slug
+// Sending email by his slug
 Email::findBySlug('my_slug')->send('email@tld.com', $data);
-```
 
-If needed, you can force another layout by passing his id in the `$data` array :
-
-```php
-$data = ['layout_id' => 2, 'firstname' => 'John', 'lastname' => 'Doe'];
+// Or by his id
+Email::find(1)->send('email@tld.com', $data);
 ```
 
 ## Package update
 
-Laravel Boilerplate E-mail Editor comes with assets such as Javascript, CSS, and images. Since you typically will need to overwrite the assets
-every time the package is updated, you may use the ```--force``` flag :
-
-```
-php artisan vendor:publish --provider="Sebastienheyd\BoilerplateEmailEditor\BoilerplateEmailEditorServiceProvider" --tag=public --force
-```
-
-To auto update assets each time package is updated, you can add this command to `post-autoload-dump` into the 
-file `composer.json` at the root of your project.
- 
-
-```json
-{
-    "scripts": {
-        "post-autoload-dump": [
-            "@php artisan vendor:publish --provider=\"Sebastienheyd\\BoilerplateEmailEditor\\BoilerplateEmailEditorServiceProvider\" --tag=public --force -q"
-        ]
-    }
-}
-```
+Version 7 has undergone a major upgrade, do not upgrade to this version without knowing what you are doing.

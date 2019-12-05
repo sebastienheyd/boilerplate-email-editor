@@ -4,7 +4,6 @@ namespace Sebastienheyd\BoilerplateEmailEditor\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Mail;
-use Sebastienheyd\BoilerplateEmailEditor\Facades\Blade;
 use Sebastienheyd\BoilerplateEmailEditor\Mail\Email as EmailToSend;
 
 /**
@@ -16,7 +15,6 @@ class Email extends Model
 {
     protected $table = 'emails';
     protected $fillable = [
-        'label',
         'slug',
         'layout',
         'description',
@@ -39,25 +37,40 @@ class Email extends Model
         return trim($content);
     }
 
-    public function render($data = [], $emptyVariableError = true)
+    public function render($data = [])
     {
-        $data['sender_name'] = $data['sender_name'] ?? $this->sender_name ?? config('mail.from.name');
-        $data['sender_email'] = $data['sender_email'] ?? $this->sender_email ?? config('mail.from.address');
+        $data = [
+            'sender_name'  => $data['sender_name'] ?? $this->getAttribute('sender_name') ?? config('mail.from.name'),
+            'sender_email' => $data['sender_email'] ?? $this->getAttribute('sender_email') ?? config(
+                    'mail.from.address'
+                ),
+        ];
 
-        $content = Blade::get($this->content, $data, $emptyVariableError);
+        $content = $this->getAttribute('content');
 
-        $layout = $this->layout;
-        if (isset($data['layout_id'])) {
-            $layout = EmailLayout::find($data['layout_id']);
+        foreach ($data as $k => $v) {
+            $content = str_replace("[$k]", $v, $content);
         }
 
-        if ($layout !== null) {
+
+        if (!empty($this->getAttribute('layout'))) {
             $data['content'] = $content;
-
-            return $layout->render($data, $emptyVariableError)->getContent();
+            $content = (string)view($this->getAttribute('layout'), $data);
         }
 
-        return response($content, 200)->header('Content-Type', 'text/html');
+        return response($this->minify($content), 200)->header('Content-Type', 'text/html');
+    }
+
+    private function minify($content)
+    {
+        $replace = [
+            '/\>[^\S ]+/s'      => '>',
+            '/[^\S ]+\</'       => '<',
+            '/(\s)+/s'          => '\\1',
+            '/<!--(.|\s)*?-->/' => '',
+        ];
+
+        return preg_replace(array_keys($replace), array_values($replace), $content);
     }
 
     public function send($to, $data = [])

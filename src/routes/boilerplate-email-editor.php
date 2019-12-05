@@ -11,17 +11,10 @@ $default = [
 Route::group($default, function () {
 
     // Layouts
-    Route::get('layout/preview', ['as' => 'layout.preview', 'uses' => 'EmailLayoutController@preview']);
-    Route::post('layout/preview', ['as' => 'layout.preview.post', 'uses' => 'EmailLayoutController@previewPost']);
-    Route::post('layout/datatable', ['as' => 'layout.datatable', 'uses' => 'EmailLayoutController@datatable']);
-    Route::post('layout/preview/email', [
-        'as'   => 'layout.preview.email',
-        'uses' => 'EmailLayoutController@previewEmail',
-    ]);
-    Route::post('layout/mce', ['as' => 'layout.mce', 'uses' => 'EmailLayoutController@getMce']);
-    Route::resource('layout', 'EmailLayoutController');
+    //Route::resource('layout', 'EmailLayoutController');
 
     // Emails
+    Route::post('email/mce', ['as' => 'email.mce', 'uses' => 'EmailController@getMce']);
     Route::get('email/preview', ['as' => 'email.preview', 'uses' => 'EmailController@preview']);
     Route::post('email/preview', ['as' => 'email.preview.post', 'uses' => 'EmailController@previewPost']);
     Route::post('email/preview/email', ['as' => 'email.preview.email', 'uses' => 'EmailController@previewEmail']);

@@ -3,7 +3,6 @@
     'subtitle' => __('boilerplate-email-editor::email.add.title'),
     'breadcrumb' => [
         __('boilerplate-email-editor::editor.title'),
-        __('boilerplate-email-editor::layout.title') => 'emaileditor.layout.index',
         __('boilerplate-email-editor::email.add.title')
     ]
 ])
@@ -59,11 +58,11 @@
                     <h3 class="box-title">{{ __('boilerplate-email-editor::email.Parameters') }}</h3>
                 </div>
                 <div class="box-body">
-                    <div class="form-group {{ $errors->has('label') ? 'has-error' : '' }}">
-                        {{ Form::label('label', __('boilerplate-email-editor::email.Label'), ['class' => 'required']) }}
-                        {{ Form::text('label', old('label'), ['class' => 'form-control']) }}
-                        <small class="text-muted">{{ __('boilerplate-email-editor::email.LabelBo') }}</small>
-                        {!! $errors->first('label','<p class="text-danger"><strong>:message</strong></p>') !!}
+                    <div class="form-group">
+                        {{ Form::label('slug', __('boilerplate-email-editor::email.Slug'), ['class' => 'required']) }}
+                        {{ Form::text('slug', old('slug'), ['class' => 'form-control'.($errors->has('slug') ? ' is-invalid' : '')]) }}
+                        <small class="text-muted">{{ __('boilerplate-email-editor::email.Slug_tip') }}</small>
+                        {!! $errors->first('slug','<p class="text-danger"><strong>:message</strong></p>') !!}
                     </div>
                     <div class="form-group {{ $errors->has('description') ? 'has-error' : '' }}">
                         {{ Form::label('description',  __('boilerplate-email-editor::email.Description')) }}
@@ -71,14 +70,8 @@
                         {!! $errors->first('description','<p class="text-danger"><strong>:message</strong></p>') !!}
                     </div>
                     <div class="form-group">
-                        {{ Form::label('slug', __('boilerplate-email-editor::email.Slug')) }}
-                        {{ Form::text('slug', old('slug'), ['class' => 'form-control'.($errors->has('slug') ? ' is-invalid' : '')]) }}
-                        <small class="text-muted">{{ __('boilerplate-email-editor::email.Slug_tip') }}</small>
-                        {!! $errors->first('slug','<p class="text-danger"><strong>:message</strong></p>') !!}
-                    </div>
-                    <div class="form-group">
                         {{ Form::label('layout_id', __('boilerplate-email-editor::email.Layout')) }}
-                        {{ Form::select('layout_id', [0 => '-'] + $layouts, old('layout_id'), ['class' => 'form-control'.($errors->has('layout_id') ? ' is-invalid' : '')]) }}
+                        {{ Form::select('layout', ['0' => '-'] + $layouts, old('layout'), ['class' => 'form-control'.($errors->has('layout') ? ' is-invalid' : '')]) }}
                         {!! $errors->first('layout_id','<p class="text-danger"><strong>:message</strong></p>') !!}
                     </div>
                 </div>

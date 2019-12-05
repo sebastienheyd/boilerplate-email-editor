@@ -19,8 +19,6 @@ return [
     'actions'       => 'Actions',
     'subject'       => 'sujet',
     'Subject'       => 'Sujet',
-    'label'         => 'libellé',
-    'Label'         => 'Libellé',
     'description'   => 'description',
     'Description'   => 'Description',
     'Content'       => 'Contenu',

@@ -28,7 +28,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Sebastienheyd\\BoilerplateEmailEditor\\BoilerplateEmailEditorServiceProvider"
+                "Sebastienheyd\\BoilerplateEmailEditor\\ServiceProvider"
             ]
         }
     },

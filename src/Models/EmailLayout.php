@@ -2,7 +2,6 @@
 
 namespace Sebastienheyd\BoilerplateEmailEditor\Models;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class EmailLayout
@@ -14,14 +13,16 @@ class EmailLayout
      */
     public static function getList()
     {
-        $layouts = collect(Storage::disk('email-layout')->files())->filter(function ($v, $k) {
-            return preg_match('`^(.*?)\.blade\.php$`', $v) != false;
-        })->toArray();
+        $layouts = collect(Storage::disk('email-layouts')->files())->filter(
+            function ($v) {
+                return preg_match('`^(.*?)\.blade\.php$`', $v) != false;
+            }
+        )->toArray();
 
         $result = [];
 
         foreach ($layouts as $layout) {
-            $lines = file(Storage::disk('email-layout')->path($layout));
+            $lines = file(Storage::disk('email-layouts')->path($layout));
             $layout = preg_replace('`\.blade\.php$`', '', $layout);
 
             if (preg_match('`^{{--(.*?)--}}$`', trim($lines[0]), $m)) {
@@ -30,10 +31,10 @@ class EmailLayout
                 $layoutName = ucfirst($layout);
             }
 
-            $result['email-layout.' . $layout] = $layoutName;
+            $result['email-layouts.'.$layout] = $layoutName;
         }
 
-        if (!isset($result['email-layout.default'])) {
+        if (!isset($result['email-template.default'])) {
             $result['boilerplate-email-editor::layout.default'] = 'HTML';
         }
 
@@ -41,7 +42,6 @@ class EmailLayout
 
         return $result;
     }
-
 
 
 }

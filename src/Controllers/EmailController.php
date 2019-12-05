@@ -5,6 +5,7 @@ namespace Sebastienheyd\BoilerplateEmailEditor\Controllers;
 use App\Http\Controllers\Controller;
 use DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Mail;
 use Sebastienheyd\BoilerplateEmailEditor\Facades\Blade;
 use Sebastienheyd\BoilerplateEmailEditor\Mail\Preview;
@@ -18,7 +19,7 @@ class EmailController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('ability:admin,emaileditor_email_crud');
+        $this->middleware('ability:admin,emaileditor_email_edition,emaileditor_email_dev');
     }
 
     /**
@@ -42,16 +43,22 @@ class EmailController extends Controller
     {
         return Datatables::of(Email::select('*'))
             ->rawColumns(['actions'])
-            ->editColumn('actions', function ($email) {
-                $b = '<a href="' . route('emaileditor.email.show', $email->id) .
-                    '" class="btn btn-default btn-sm mrs" target="_blank"><i class="fa fa-eye"></i></a>';
-                $b .= '<a href="' . route('emaileditor.email.edit', $email->id) .
-                    '" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
-                $b .= '<a href="' . route('emaileditor.email.destroy', $email->id) .
-                    '" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
+            ->editColumn(
+                'actions',
+                function ($email) {
+                    $b = '<a href="'.route('emaileditor.email.show', $email->id).
+                        '" class="btn btn-default btn-sm mrs" target="_blank"><i class="fa fa-eye"></i></a>';
+                    $b .= '<a href="'.route('emaileditor.email.edit', $email->id).
+                        '" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
 
-                return $b;
-            })->make(true);
+                    if (Auth::user()->ability('admin', 'emaileditor_email_dev')) {
+                        $b .= '<a href="'.route('emaileditor.email.destroy', $email->id).
+                            '" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
+                    }
+
+                    return $b;
+                }
+            )->make(true);
     }
 
     /**
@@ -61,8 +68,12 @@ class EmailController extends Controller
      */
     public function create(Request $request)
     {
+        if (!Auth::user()->ability('admin', 'emaileditor_email_dev')) {
+            abort(403);
+        }
+
         $userEmail = $request->user()->email;
-        $layouts = EmailLayout::all()->pluck('label', 'id')->toArray();
+        $layouts = EmailLayout::getList();
 
         return view('boilerplate-email-editor::email.create', compact('userEmail', 'layouts'));
     }
@@ -79,20 +90,23 @@ class EmailController extends Controller
     public function store(Request $request)
     {
         $request->merge(['content' => $this->parseContent($request->input('content'))]);
-        $request->merge(['layout_id' => $request->input('layout_id') == '0' ? null : $request->input('layout_id')]);
+        $request->merge(['layout' => $request->input('layout') == '0' ? null : $request->input('layout')]);
 
-        $this->validate($request, [
-            'label'        => 'required',
-            'subject'      => 'required',
-            'content'      => 'required',
-            'sender_email' => 'nullable|email',
-            'slug'         => 'unique:emails,slug',
-        ], [], [
-            'subject'      => __('boilerplate-email-editor::email.subject'),
-            'label'        => __('boilerplate-email-editor::email.label'),
-            'sender_email' => __('boilerplate-email-editor::email.sender_email'),
-            'slug'         => __('boilerplate-email-editor::email.slug'),
-        ]);
+        $this->validate(
+            $request,
+            [
+                'subject'      => 'required',
+                'content'      => 'required',
+                'sender_email' => 'nullable|email',
+                'slug'         => 'unique:emails,slug',
+            ],
+            [],
+            [
+                'subject'      => __('boilerplate-email-editor::email.subject'),
+                'sender_email' => __('boilerplate-email-editor::email.sender_email'),
+                'slug'         => __('boilerplate-email-editor::email.slug'),
+            ]
+        );
 
         $email = Email::create($request->all());
 
@@ -156,7 +170,7 @@ class EmailController extends Controller
      */
     public function show($id)
     {
-        return Email::findOrFail($id)->render([], false);
+        return Email::find($id)->render([], false);
     }
 
     /**
@@ -189,23 +203,36 @@ class EmailController extends Controller
     public function update(Request $request, $id)
     {
         $request->merge(['content' => $this->parseContent($request->input('content'))]);
-        $request->merge(['layout_id' => $request->input('layout_id') == '0' ? null : $request->input('layout_id')]);
-
-        $this->validate($request, [
-            'label'        => 'required',
-            'subject'      => 'required',
-            'content'      => 'required',
-            'sender_email' => 'nullable|email',
-            'slug'         => 'unique:emails,slug,' . $id,
-        ], [], [
-            'subject'      => __('boilerplate-email-editor::email.subject'),
-            'label'        => __('boilerplate-email-editor::email.label'),
-            'sender_email' => __('boilerplate-email-editor::email.sender_email'),
-            'slug'         => __('boilerplate-email-editor::email.slug'),
-        ]);
+        $request->merge(['layout' => $request->input('layout_id') == '0' ? null : $request->input('layout')]);
 
         $email = Email::findOrFail($id);
-        $email->update($request->all());
+        $data = $request->all();
+
+        // By security
+        if (!Auth::user()->ability('admin', 'emaileditor_email_dev')) {
+            $data['description'] = $email->description;
+            $data['slug'] = $email->slug;
+            $data['layout'] = $email->layout;
+        }
+
+        $this->validate(
+            $request,
+            [
+                'subject'      => 'required',
+                'content'      => 'required',
+                'sender_email' => 'nullable|email',
+                'unique:emails,slug,'.$id
+            ],
+            [],
+            [
+                'subject'      => __('boilerplate-email-editor::email.subject'),
+                'sender_email' => __('boilerplate-email-editor::email.sender_email'),
+                'slug'         => __('boilerplate-email-editor::email.slug'),
+            ]
+        );
+
+
+        $email->update($data);
 
         return redirect()->route('emaileditor.email.edit', $email)
             ->with('growl', [__('boilerplate-email-editor::email.updatesuccess'), 'success']);
@@ -218,6 +245,10 @@ class EmailController extends Controller
      */
     public function destroy($id)
     {
+        if (!Auth::user()->ability('admin', 'emaileditor_email_dev')) {
+            abort(403);
+        }
+
         Email::destroy($id);
     }
 
@@ -289,5 +320,33 @@ class EmailController extends Controller
         }
 
         return response($content, 200)->header('Content-Type', 'text/html');
+    }
+
+    /**
+     * Get content for TinyMCE.
+     *
+     * @param Request $request
+     *
+     * @return array|string|null
+     */
+    public function getMce(Request $request)
+    {
+        if (class_exists('Debugbar')) {
+            \Debugbar::disable();
+        }
+
+        $content = $request->post('content', '');
+
+        if (empty($request->post('view'))) {
+            return $content;
+        }
+
+        $content = [
+            'sender_email' => $request->input('sender_email') ?? config('mail.from.address'),
+            'sender_name'  => $request->input('sender_name') ?? config('mail.from.name'),
+            'content'      => sprintf('<div id="mceEditableContent" contenteditable="true">%s</div>', $content),
+        ];
+
+        return view($request->post('view'), $content);
     }
 }

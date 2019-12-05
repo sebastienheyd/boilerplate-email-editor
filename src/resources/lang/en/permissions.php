@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'layout_crud' => [
-        'display_name' => 'Management of email templates',
-        'description'  => 'Allows the creation, editing and deletion of email templates',
+    'email_edition' => [
+        'display_name' => 'Email edition',
+        'description'  => 'User can edit e-mail subject, content and sender',
     ],
-    'email_crud'  => [
-        'display_name' => 'Email management',
-        'description'  => 'Allows the creation, editing and deletion of e-mails',
+    'email_dev'     => [
+        'display_name' => 'Email development',
+        'description'  => 'User can add new email, view layouts and edit email description, slug and layout',
     ],
 ];
