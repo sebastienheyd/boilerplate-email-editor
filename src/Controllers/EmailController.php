@@ -45,13 +45,13 @@ class EmailController extends Controller
             ->editColumn(
                 'actions',
                 function ($email) {
-                    $b = '<a href="' . route('emaileditor.email.show', $email->id) .
+                    $b = '<a href="'.route('emaileditor.email.show', $email->id).
                         '" class="btn btn-default btn-sm mrs" target="_blank"><i class="fa fa-eye"></i></a>';
-                    $b .= '<a href="' . route('emaileditor.email.edit', $email->id) .
+                    $b .= '<a href="'.route('emaileditor.email.edit', $email->id).
                         '" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
 
                     if (Auth::user()->ability('admin', 'emaileditor_email_dev')) {
-                        $b .= '<a href="' . route('emaileditor.email.destroy', $email->id) .
+                        $b .= '<a href="'.route('emaileditor.email.destroy', $email->id).
                             '" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
                     }
 
@@ -175,7 +175,7 @@ class EmailController extends Controller
     /**
      * Show the form for editing email layout.
      *
-     * @param int $id
+     * @param int     $id
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -220,7 +220,7 @@ class EmailController extends Controller
                 'subject'      => 'required',
                 'content'      => 'required',
                 'sender_email' => 'nullable|email',
-                'unique:emails,slug,' . $id,
+                'unique:emails,slug,'.$id,
             ],
             [],
             [
@@ -229,7 +229,6 @@ class EmailController extends Controller
                 'slug'         => __('boilerplate-email-editor::email.slug'),
             ]
         );
-
 
         $email->update($data);
 
@@ -272,7 +271,7 @@ class EmailController extends Controller
 
         if (!empty($layout)) {
             $data['content'] = $content;
-            $content = (string)view($layout, $data);
+            $content = (string) view($layout, $data);
         }
 
         $mail = new Preview($content);
@@ -315,6 +314,7 @@ class EmailController extends Controller
 
         if (!empty($layout)) {
             $data['content'] = $content;
+
             return view($layout, $data);
         }
 
