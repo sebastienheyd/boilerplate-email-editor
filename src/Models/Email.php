@@ -45,7 +45,7 @@ class Email extends Model
     public function getMceContentAttribute()
     {
         $content = $this->getAttribute('content');
-        $content = preg_replace('`\[([a-zA-Z0-9_-]*)]`', '<variable contenteditable="false">[$1]</variable>', $content);
+        $content = preg_replace('`([^"])\[([a-zA-Z0-9_-]*)]([^"])`', '$1<variable contenteditable="false">[$2]</variable>$3', $content);
 
         return trim($content);
     }
