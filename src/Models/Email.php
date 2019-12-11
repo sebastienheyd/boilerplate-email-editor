@@ -52,7 +52,7 @@ class Email extends Model
             LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT);
 
         $this->domTextReplace('`\[([a-zA-Z0-9_-]*)]`', '<variable contenteditable="false">[$1]</variable>', $html);
-        $content = (string)$html->saveHTML();
+        $content = (string) $html->saveHTML();
         $content = html_entity_decode($content);
         $content = preg_replace('`%5B(([a-zA-Z0-9_-]*))%5D`', '[$1]', $content);
         return trim($content);
@@ -61,8 +61,8 @@ class Email extends Model
     /**
      * Replace text only in text nodes, not in attributes.
      *
-     * @param string $search
-     * @param string $replace
+     * @param string                 $search
+     * @param string                 $replace
      * @param DOMDocument|DOMElement $domNode
      */
     private function domTextReplace($search, $replace, &$domNode)
