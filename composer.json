@@ -4,6 +4,8 @@
     "keywords": ["laravel", "boilerplate", "email", "mail", "e-mail", "editor"],
     "type": "library",
     "require": {
+        "ext-libxml": "*",
+        "ext-dom": "*",
         "sebastienheyd/boilerplate": "^6.1|dev-master",
         "sebastienheyd/boilerplate-media-manager": "^6.1|dev-master"
     },

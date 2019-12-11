@@ -2,6 +2,8 @@
 
 namespace Sebastienheyd\BoilerplateEmailEditor\Models;
 
+use DOMDocument;
+use DOMElement;
 use Illuminate\Database\Eloquent\Model;
 use Mail;
 use Sebastienheyd\BoilerplateEmailEditor\Mail\Email as EmailToSend;
@@ -45,9 +47,44 @@ class Email extends Model
     public function getMceContentAttribute()
     {
         $content = $this->getAttribute('content');
-        $content = preg_replace('`([^"])\[([a-zA-Z0-9_-]*)]([^"])`', '$1<variable contenteditable="false">[$2]</variable>$3', $content);
+        $html = new DOMDocument();
+        @$html->loadHTML('<?xml encoding="UTF-8">'.$content,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT);
 
+        $this->domTextReplace('`\[([a-zA-Z0-9_-]*)]`', '<variable contenteditable="false">[$1]</variable>', $html);
+        $content = (string)$html->saveHTML();
+        $content = html_entity_decode($content);
+        $content = preg_replace('`%5B(([a-zA-Z0-9_-]*))%5D`', '[$1]', $content);
         return trim($content);
+    }
+
+    /**
+     * Replace text only in text nodes, not in attributes.
+     *
+     * @param string $search
+     * @param string $replace
+     * @param DOMDocument|DOMElement $domNode
+     */
+    private function domTextReplace($search, $replace, &$domNode)
+    {
+        if ($domNode->hasChildNodes()) {
+            $children = [];
+            foreach ($domNode->childNodes as $child) {
+                $children[] = $child;
+            }
+            foreach ($children as $child) {
+                if ($child->nodeType == XML_PI_NODE) {
+                    $domNode->removeChild($child);
+                } elseif ($child->nodeType === XML_TEXT_NODE) {
+                    $oldText = $child->wholeText;
+                    $newText = preg_replace($search, $replace, $oldText);
+                    $newTextNode = $domNode->ownerDocument->createTextNode($newText);
+                    $domNode->replaceChild($newTextNode, $child);
+                } else {
+                    $this->domTextReplace($search, $replace, $child);
+                }
+            }
+        }
     }
 
     /**
