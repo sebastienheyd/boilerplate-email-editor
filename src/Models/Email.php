@@ -25,11 +25,23 @@ class Email extends Model
     ];
     public $timestamps = false;
 
+    /**
+     * Get email by his slug
+     *
+     * @param $slug
+     *
+     * @return mixed
+     */
     public static function findBySlug($slug)
     {
         return self::whereSlug($slug)->firstOrFail();
     }
 
+    /**
+     * Get email content for TinyMCE edition
+     *
+     * @return string
+     */
     public function getMceContentAttribute()
     {
         $content = $this->getAttribute('content');
@@ -38,9 +50,16 @@ class Email extends Model
         return trim($content);
     }
 
+    /**
+     * Render email content
+     *
+     * @param array $data
+     *
+     * @return string
+     */
     public function render($data = [])
     {
-        $data = [
+        $data = $data + [
             'sender_name'  => $data['sender_name'] ?? $this->getAttribute('sender_name') ?? config('mail.from.name'),
             'sender_email' => $data['sender_email'] ?? $this->getAttribute('sender_email') ?? config(
                 'mail.from.address'
@@ -48,6 +67,10 @@ class Email extends Model
         ];
 
         $content = $this->getAttribute('content');
+
+        if (!is_string($content) || empty($content)) {
+            return '';
+        }
 
         foreach ($data as $k => $v) {
             $content = str_replace("[$k]", $v, $content);
@@ -58,9 +81,16 @@ class Email extends Model
             $content = (string) view($this->getAttribute('layout'), $data);
         }
 
-        return response($this->minify($content), 200)->header('Content-Type', 'text/html');
+        return $this->minify($content);
     }
 
+    /**
+     * Minify HTML content
+     *
+     * @param $content
+     *
+     * @return string
+     */
     private function minify($content)
     {
         $replace = [
@@ -73,6 +103,12 @@ class Email extends Model
         return preg_replace(array_keys($replace), array_values($replace), $content);
     }
 
+    /**
+     * Send current email
+     *
+     * @param string $to
+     * @param array $data
+     */
     public function send($to, $data = [])
     {
         $mail = new EmailToSend($this->id, $data);

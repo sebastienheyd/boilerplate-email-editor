@@ -36,6 +36,13 @@ class Preview extends Mailable
         $this->content = $html->saveHTML();
     }
 
+    /**
+     * Get preview subject
+     *
+     * @param string $subject
+     *
+     * @return Mailable
+     */
     public function subject($subject)
     {
         $subject = '[PREVIEW] '.$subject;

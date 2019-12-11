@@ -169,7 +169,8 @@ class EmailController extends Controller
      */
     public function show($id)
     {
-        return Email::find($id)->render([], false);
+        $content = Email::find($id)->render([], false);
+        return response($content, 200)->header('Content-Type', 'text/html');
     }
 
     /**

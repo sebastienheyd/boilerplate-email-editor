@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 class EmailLayout
 {
     /**
-     * Get e-mail layouts array.
+     * Get email layouts array.
      *
      * @return array
      */
