@@ -26,7 +26,7 @@ class Email extends Model
     public $timestamps = false;
 
     /**
-     * Get email by his slug
+     * Get email by his slug.
      *
      * @param $slug
      *
@@ -38,7 +38,7 @@ class Email extends Model
     }
 
     /**
-     * Get email content for TinyMCE edition
+     * Get email content for TinyMCE edition.
      *
      * @return string
      */
@@ -51,7 +51,7 @@ class Email extends Model
     }
 
     /**
-     * Render email content
+     * Render email content.
      *
      * @param array $data
      *
@@ -85,7 +85,7 @@ class Email extends Model
     }
 
     /**
-     * Minify HTML content
+     * Minify HTML content.
      *
      * @param $content
      *
@@ -104,10 +104,10 @@ class Email extends Model
     }
 
     /**
-     * Send current email
+     * Send current email.
      *
      * @param string $to
-     * @param array $data
+     * @param array  $data
      */
     public function send($to, $data = [])
     {
