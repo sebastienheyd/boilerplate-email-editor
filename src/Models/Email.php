@@ -55,6 +55,7 @@ class Email extends Model
         $content = (string) $html->saveHTML();
         $content = html_entity_decode($content);
         $content = preg_replace('`%5B(([a-zA-Z0-9_-]*))%5D`', '[$1]', $content);
+
         return trim($content);
     }
 
