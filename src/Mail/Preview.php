@@ -37,7 +37,7 @@ class Preview extends Mailable
     }
 
     /**
-     * Get preview subject
+     * Get preview subject.
      *
      * @param string $subject
      *
