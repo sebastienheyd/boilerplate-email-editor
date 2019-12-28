@@ -17,13 +17,12 @@ class Emails extends Migration
     {
         Schema::create('emails', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('slug')->unique()->nullable();
-            $table->string('label');
+            $table->string('slug')->unique();
+            $table->string('subject');
+            $table->string('layout');
+            $table->string('description')->nullable();
             $table->string('sender_name')->nullable();
             $table->string('sender_email')->nullable();
-            $table->string('template')->index()->nullable();
-            $table->string('description')->nullable();
-            $table->string('subject');
             $table->longText('content');
             $table->softDeletes();
         });

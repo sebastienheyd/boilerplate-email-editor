@@ -11,7 +11,7 @@ class BoilerplateEmailEditor
         $menu->add(__('boilerplate-email-editor::editor.title'), [
                 'permission' => 'emaileditor_email_edition,emaileditor_email_dev',
                 'route'      => 'emaileditor.email.index',
-                'icon'       => 'envelope-o', ])
+                'icon'       => 'mail-bulk', ])
             ->id('emaileditor')
             ->activeIfRoute('emaileditor.*')
             ->order(900);

@@ -105,7 +105,6 @@ class Email extends Model
         ];
 
         $content = $this->getAttribute('content');
-
         if (!is_string($content) || empty($content)) {
             return '';
         }
@@ -119,7 +118,35 @@ class Email extends Model
             $content = (string) view($this->getAttribute('layout'), $data);
         }
 
+        $this->parseImg($content);
+
         return $this->minify($content);
+    }
+
+    private function parseImg(& $content)
+    {
+        $html = new \DOMDocument('1.0', 'utf-8');
+        @$html->loadHTML($content);
+
+        $tags = $html->getElementsByTagName('img');
+
+        if (!empty($tags)) {
+            foreach ($tags as $tag) {
+                $src = $tag->getAttribute('src');
+
+                if (preg_match('`^/`', $src)) {
+                    $width = $tag->getAttribute('width');
+                    $height = $tag->getAttribute('height');
+                    if(!empty($width) && !empty($height)) {
+                        $src = img_url($src, $width, $height, 'resize');
+                    }
+                    $tag->setAttribute('src', config('app.url').$src);
+                    $html->saveHTML($tag);
+                }
+            }
+        }
+
+        $content = $html->saveHTML();
     }
 
     /**

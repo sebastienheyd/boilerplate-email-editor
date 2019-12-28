@@ -46,13 +46,13 @@ class EmailController extends Controller
                 'actions',
                 function ($email) {
                     $b = '<a href="'.route('emaileditor.email.show', $email->id).
-                        '" class="btn btn-default btn-sm mrs" target="_blank"><i class="fa fa-eye"></i></a>';
+                        '" class="btn btn-default btn-sm mr-1" target="_blank"><i class="fa fa-fw fa-eye"></i></a>';
                     $b .= '<a href="'.route('emaileditor.email.edit', $email->id).
-                        '" class="btn btn-primary btn-sm mrs"><i class="fa fa-pencil"></i></a>';
+                        '" class="btn btn-primary btn-sm mr-1"><i class="fa fa-fw fa-pencil-alt"></i></a>';
 
                     if (Auth::user()->ability('admin', 'emaileditor_email_dev')) {
                         $b .= '<a href="'.route('emaileditor.email.destroy', $email->id).
-                            '" class="btn btn-danger btn-sm destroy"><i class="fa fa-trash"></i></a>';
+                            '" class="btn btn-danger btn-sm destroy"><i class="fa fa-fw fa-trash"></i></a>';
                     }
 
                     return $b;
@@ -97,7 +97,7 @@ class EmailController extends Controller
                 'subject'      => 'required',
                 'content'      => 'required',
                 'sender_email' => 'nullable|email',
-                'slug'         => 'unique:emails,slug',
+                'slug'         => 'required|unique:emails,slug',
             ],
             [],
             [
