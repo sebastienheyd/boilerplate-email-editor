@@ -123,7 +123,7 @@ class Email extends Model
         return $this->minify($content);
     }
 
-    private function parseImg(& $content)
+    private function parseImg(&$content)
     {
         $html = new \DOMDocument('1.0', 'utf-8');
         @$html->loadHTML($content);
@@ -137,7 +137,7 @@ class Email extends Model
                 if (preg_match('`^/`', $src)) {
                     $width = $tag->getAttribute('width');
                     $height = $tag->getAttribute('height');
-                    if(!empty($width) && !empty($height)) {
+                    if (!empty($width) && !empty($height)) {
                         $src = img_url($src, $width, $height, 'resize');
                     }
                     $tag->setAttribute('src', config('app.url').$src);
