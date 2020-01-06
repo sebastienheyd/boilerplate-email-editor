@@ -222,7 +222,7 @@ class EmailController extends Controller
                 'subject'      => 'required',
                 'content'      => 'required',
                 'sender_email' => 'nullable|email',
-                'unique:emails,slug,'.$id,
+                'slug'         => 'required|unique:emails,slug,'.$id,
             ],
             [],
             [

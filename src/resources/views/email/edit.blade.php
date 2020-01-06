@@ -13,22 +13,22 @@
     <div class="row">
         <div class="col-md-4">
             @component('boilerplate::card', ['color' => 'success', 'title' => __('boilerplate-email-editor::email.header')])
-                <div class="form-group {{ $errors->has('subject') ? 'has-error' : '' }}">
+                <div class="form-group">
                     {{ Form::label('subject', __('boilerplate-email-editor::email.Subject'), ['class' => 'required']) }}
-                    {{ Form::text('subject', old('subject', $email->subject), ['class' => 'form-control']) }}
+                    {{ Form::text('subject', old('subject', $email->subject), ['class' => 'form-control'.$errors->first('subject',' is-invalid')]) }}
                     {!! $errors->first('subject','<div class="error-bubble"><div>:message</div></div>') !!}
                 </div>
-                <div class="form-group {{ $errors->has('sender_name') ? 'has-error' : '' }}">
+                <div class="form-group">
                     {{ Form::label('sender_name', __('boilerplate-email-editor::email.Sender_name')) }}
-                    {{ Form::text('sender_name', old('sender_name', $email->sender_name), ['class' => 'form-control', 'placeholder' => config('mail.from.name')]) }}
-                    <small class="text-muted">{{ __('boilerplate-email-editor::email.ifNameEmpty') }}</small>
+                    {{ Form::text('sender_name', old('sender_name', $email->sender_name), ['class' => 'form-control'.$errors->first('sender_name',' is-invalid'), 'placeholder' => config('mail.from.name')]) }}
                     {!! $errors->first('sender_name','<div class="error-bubble"><div>:message</div></div>') !!}
+                    <small class="text-muted">{{ __('boilerplate-email-editor::email.ifNameEmpty') }}</small>
                 </div>
-                <div class="form-group {{ $errors->has('sender_email') ? 'has-error' : '' }}">
+                <div class="form-group">
                     {{ Form::label('sender_email', __('boilerplate-email-editor::email.Sender_email')) }}
-                    {{ Form::text('sender_email', old('sender_email', $email->sender_email), ['class' => 'form-control', 'placeholder' => config('mail.from.address')]) }}
-                    <small class="text-muted">{{ __('boilerplate-email-editor::email.ifAdressEmpty') }}</small>
+                    {{ Form::text('sender_email', old('sender_email', $email->sender_email), ['class' => 'form-control'.$errors->first('sender_email',' is-invalid'), 'placeholder' => config('mail.from.address')]) }}
                     {!! $errors->first('sender_email','<div class="error-bubble"><div>:message</div></div>') !!}
+                    <small class="text-muted">{{ __('boilerplate-email-editor::email.ifAdressEmpty') }}</small>
                 </div>
             @endcomponent
 
@@ -36,18 +36,18 @@
             @component('boilerplate::card', ['color' => 'primary', 'title' => __('boilerplate-email-editor::email.Parameters')])
                 <div class="form-group">
                     {{ Form::label('slug', __('boilerplate-email-editor::email.Slug'), ['class' => 'required']) }}
-                    {{ Form::text('slug', old('slug', $email->slug), ['class' => 'form-control'.($errors->has('slug') ? ' is-invalid' : '')]) }}
-                    <small class="text-muted">{{ __('boilerplate-email-editor::email.Slug_tip') }}</small>
+                    {{ Form::text('slug', old('slug', $email->slug), ['class' => 'form-control'.$errors->first('slug',' is-invalid')]) }}
                     {!! $errors->first('slug','<div class="error-bubble"><div>:message</div></div>') !!}
+                    <small class="text-muted">{{ __('boilerplate-email-editor::email.Slug_tip') }}</small>
                 </div>
-                <div class="form-group {{ $errors->has('description') ? 'has-error' : '' }}">
+                <div class="form-group">
                     {{ Form::label('description', __('boilerplate-email-editor::email.Description')) }}
-                    {{ Form::text('description', old('description', $email->description), ['class' => 'form-control']) }}
+                    {{ Form::text('description', old('description', $email->description), ['class' => 'form-control'.$errors->first('description',' is-invalid')]) }}
                     {!! $errors->first('description','<div class="error-bubble"><div>:message</div></div>') !!}
                 </div>
                 <div class="form-group">
                     {{ Form::label('layout', __('boilerplate-email-editor::email.Layout')) }}
-                    {{ Form::select('layout', ['0' => '-'] + $layouts, old('layout', $email->layout), ['class' => 'form-control'.($errors->has('layout') ? ' is-invalid' : '')]) }}
+                    {{ Form::select('layout', ['0' => '-'] + $layouts, old('layout', $email->layout), ['class' => 'form-control'.$errors->first('layout',' is-invalid')]) }}
                     {!! $errors->first('layout','<div class="error-bubble"><div>:message</div></div>') !!}
                 </div>
             @endcomponent
@@ -59,7 +59,7 @@
             @component('boilerplate::card', ['color' => 'info', 'title' => __('boilerplate-email-editor::email.Content')])
                 <div class="form-group">
                     {!! $errors->first('content','<div class="error-bubble"><div>:message</div></div>') !!}
-                    {{ Form::textarea('content', old('content', $email->mce_content), ['class' => 'form-control', 'id' => 'content']) }}
+                    {{ Form::textarea('content', old('content', $email->mce_content), ['class' => 'form-control'.$errors->first('subject',' is-invalid'), 'id' => 'content']) }}
                 </div>
             @endcomponent
         </div>

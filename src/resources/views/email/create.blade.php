@@ -21,14 +21,14 @@
                 <div class="form-group">
                     {{ Form::label('sender_name', __('boilerplate-email-editor::email.Sender_name')) }}
                     {{ Form::text('sender_name', old('sender_name'), ['class' => 'form-control'.$errors->first('sender_name', ' is-invalid'), 'placeholder' => config('mail.from.name')]) }}
-                    <small class="text-muted">{{ __('boilerplate-email-editor::email.ifNameEmpty') }}</small>
                     {!! $errors->first('sender_name','<div class="error-bubble"><div>:message</div></div>') !!}
+                    <small class="text-muted">{{ __('boilerplate-email-editor::email.ifNameEmpty') }}</small>
                 </div>
                 <div class="form-group">
                     {{ Form::label('sender_email', __('boilerplate-email-editor::email.Sender_email')) }}
                     {{ Form::text('sender_email', old('sender_email'), ['class' => 'form-control'.$errors->first('sender_email', ' is-invalid'), 'placeholder' => config('mail.from.address')]) }}
-                    <small class="text-muted">{{ __('boilerplate-email-editor::email.ifAdressEmpty') }}</small>
                     {!! $errors->first('sender_email','<div class="error-bubble"><div>:message</div></div>') !!}
+                    <small class="text-muted">{{ __('boilerplate-email-editor::email.ifAdressEmpty') }}</small>
                 </div>
             @endcomponent
 
