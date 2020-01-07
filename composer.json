@@ -6,8 +6,8 @@
     "require": {
         "ext-libxml": "*",
         "ext-dom": "*",
-        "sebastienheyd/boilerplate": "^6.1|dev-master",
-        "sebastienheyd/boilerplate-media-manager": "^6.1|dev-master"
+        "sebastienheyd/boilerplate": "^6.1|6.0.x-dev",
+        "sebastienheyd/boilerplate-media-manager": "^6.1|6.0.x-dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.0",
