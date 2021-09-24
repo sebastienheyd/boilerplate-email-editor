@@ -1,9 +1,9 @@
 @include('boilerplate-media-manager::load.tinymce')
+@include('boilerplate::load.codemirror')
 @push('js')
+@component('boilerplate::minify')
     <script>
-
-        $(function () {
-
+        $(() => {
             loadMCE();
 
             $('[name=layout]').on('change', function () {
@@ -13,7 +13,7 @@
                     data: {
                         content: $("#content").tinymce().getContent()
                     },
-                    success: function (text) {
+                    success: (text) => {
                         $('#content').html(text);
                         reloadMCE();
                     }
@@ -77,12 +77,14 @@
 
         function loadMCE() {
             $('#content').tinymce({
-                plugins: tinymce.defaultSettings.plugins + " noneditable",
+                plugins: tinymce.defaultSettings.plugins.replace('codemirror', '').replace('fullscreen', '') + " noneditable",
+                content_css: false,
+                visual: false,
+                valid_children : '+body[style],style',
                 remove_script_host: true,
                 object_resizing: "img",
                 relative_urls: false,
                 convert_urls: false,
-                visual: false,
                 verify_html: false,
                 toolbar1: tinymce.defaultSettings.toolbar,
                 toolbar2: 'insertVar',
@@ -92,13 +94,16 @@
                     {title: 'Button', value: 'btn btn-default'},
                 ],
                 content_style: 'body{overflow-x:hidden}variable{background:#F0F0F0;cursor:not-allowed}',
+                forced_root_block:'',
                 setup: function (editor) {
                     editor.ui.registry.addButton('insertVar', {
                         text: '{{ __('boilerplate-email-editor::email.insert_var') }}',
                         disabled: true,
                         onAction: function (_) {
                             bootbox.prompt("{{ __('boilerplate-email-editor::email.var_name') }}", function (result) {
-                                if(result === null) { return null; }
+                                if (result === null) {
+                                    return null;
+                                }
                                 editor.insertContent('<variable contenteditable="false">[' + result + ']</variable>');
                             });
                         },
@@ -114,33 +119,55 @@
                         }
                     });
                 },
-                code_change_callback: function (editor) {
+                code_change_callback: function () {
                     $('[name=layout]').trigger('change');
                 },
-                init_instance_callback: function (editor) {
-                    loadLayout(editor);
+                init_instance_callback: function () {
+                    loadLayout();
                 }
             });
+
+            var codeMirror;
+
+            $('#email-tabs a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
+                if (e.target.id === 'code-tab') {
+                    $('#tab-code').html('<textarea></textarea>')
+
+                    let content = $('#content').val();
+                    if($(content).find('#mceEditableContent').length > 0) {
+                        content = $(content).find('#mceEditableContent').html()
+                    }
+
+                    codeMirror = $('#tab-code textarea').val(content.trim()).codemirror();
+                } else {
+                    loadLayout(codeMirror.getValue());
+                }
+            })
         }
 
-        function loadLayout(editor) {
+        function loadLayout(content) {
+            if (typeof content === 'undefined') {
+                content = tinymce.activeEditor.getContent();
+            }
+
             $.ajax({
                 url: '{{ route('emaileditor.email.mce', [], false) }}',
                 type: 'post',
                 data: {
-                    content: editor.getContent(),
+                    content: content,
                     view: $('[name=layout]').val(),
                     sender_email: $('#sender_email').val(),
                     sender_name: $('#sender_name').val()
                 },
                 success: function (html) {
-                    editor.setContent(html);
+                    tinymce.activeEditor.setContent(html);
                 }
             });
 
-            if ($('[name=layout]_id').val() !== '0') {
+            if ($('[name=layout]').val() !== '0') {
                 tinymce.activeEditor.getBody().setAttribute('contenteditable', false);
             }
         }
     </script>
+@endcomponent()
 @endpush

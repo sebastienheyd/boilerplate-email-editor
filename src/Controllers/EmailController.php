@@ -3,13 +3,15 @@
 namespace Sebastienheyd\BoilerplateEmailEditor\Controllers;
 
 use App\Http\Controllers\Controller;
-use DataTables;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Mail;
 use Sebastienheyd\BoilerplateEmailEditor\Mail\Preview;
 use Sebastienheyd\BoilerplateEmailEditor\Models\Email;
 use Sebastienheyd\BoilerplateEmailEditor\Models\EmailLayout;
+use Yajra\DataTables\Facades\DataTables;
 
 class EmailController extends Controller
 {
@@ -24,7 +26,7 @@ class EmailController extends Controller
     /**
      * Display a listing of emails layouts.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
@@ -63,7 +65,9 @@ class EmailController extends Controller
     /**
      * Show the form for creating a new email.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create(Request $request)
     {
@@ -74,7 +78,7 @@ class EmailController extends Controller
         $userEmail = $request->user()->email;
         $layouts = EmailLayout::getList();
 
-        return view('boilerplate-email-editor::email.create', compact('userEmail', 'layouts'));
+        return view('boilerplate-email-editor::email.edit', compact('userEmail', 'layouts'));
     }
 
     /**
@@ -82,11 +86,9 @@ class EmailController extends Controller
      *
      * @param Request $request
      *
-     * @throws \Illuminate\Validation\ValidationException
-     *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->merge(['content' => $this->parseContent($request->input('content'))]);
         $request->merge(['layout' => $request->input('layout') == '0' ? null : $request->input('layout')]);
@@ -120,7 +122,7 @@ class EmailController extends Controller
      *
      * @return string
      */
-    public function content(Request $request)
+    public function content(Request $request): string
     {
         return $this->parseContent($request->input('content'));
     }
@@ -128,11 +130,12 @@ class EmailController extends Controller
     /**
      * Parse e-mail content from layout html.
      *
-     * @param $content
+     * @param string $content
+     * @param array  $data
      *
      * @return string
      */
-    private function parseContent($content, $data = [])
+    private function parseContent(string $content, array $data = []): string
     {
         $content = mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8');
         $content = preg_replace('`<variable.*?>\[(.*?)]</variable>`', '[$1]', $content);
@@ -165,9 +168,9 @@ class EmailController extends Controller
      *
      * @param int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function show($id)
+    public function show($id): Response
     {
         $content = Email::find($id)->render([], false);
 
@@ -177,14 +180,13 @@ class EmailController extends Controller
     /**
      * Show the form for editing email layout.
      *
-     * @param int     $id
+     * @param Email   $email
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-    public function edit($id, Request $request)
+    public function edit(Email $email, Request $request)
     {
-        $email = Email::findOrFail($id);
         $layouts = EmailLayout::getList();
         $userEmail = $request->user()->email;
 
@@ -199,9 +201,9 @@ class EmailController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): RedirectResponse
     {
         $request->merge(['content' => $this->parseContent($request->input('content'))]);
         $request->merge(['layout' => $request->input('layout_id') == '0' ? null : $request->input('layout')]);
@@ -302,7 +304,7 @@ class EmailController extends Controller
      *
      * @throws \Exception
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
      */
     public function preview(Request $request)
     {
@@ -340,6 +342,10 @@ class EmailController extends Controller
 
         if (empty($request->post('view'))) {
             return $content;
+        }
+
+        if (preg_match('#<div id="mceEditableContent" contenteditable="true">#', $content)) {
+            $content = $this->parseContent($content);
         }
 
         $content = [
