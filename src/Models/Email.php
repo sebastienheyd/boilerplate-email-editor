@@ -48,8 +48,10 @@ class Email extends Model
     {
         $content = $this->getAttribute('content');
         $html = new DOMDocument();
-        @$html->loadHTML('<?xml encoding="UTF-8">'.$content,
-            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT);
+        @$html->loadHTML(
+            '<?xml encoding="UTF-8">'.$content,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOENT
+        );
 
         $this->domTextReplace('`\[([a-zA-Z0-9_-]*)]`', '<variable contenteditable="false">[$1]</variable>', $html);
         $content = (string) $html->saveHTML();
