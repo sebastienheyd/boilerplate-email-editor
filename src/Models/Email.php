@@ -91,10 +91,10 @@ class Email extends Model
     }
 
     /**
-     * Render email subject line
+     * Render email subject line.
      *
      * @param string $subject
-     * @param array $data
+     * @param array  $data
      *
      * @return string
      */
@@ -117,11 +117,11 @@ class Email extends Model
     public function render($data = [])
     {
         $data = $data + [
-                'sender_name'  => $data['sender_name'] ?? $this->getAttribute('sender_name') ?? config('mail.from.name'),
-                'sender_email' => $data['sender_email'] ?? $this->getAttribute('sender_email') ?? config(
-                    'mail.from.address'
-                ),
-            ];
+            'sender_name'  => $data['sender_name'] ?? $this->getAttribute('sender_name') ?? config('mail.from.name'),
+            'sender_email' => $data['sender_email'] ?? $this->getAttribute('sender_email') ?? config(
+                'mail.from.address'
+            ),
+        ];
 
         $content = $this->getAttribute('content');
         if (!is_string($content) || empty($content)) {
