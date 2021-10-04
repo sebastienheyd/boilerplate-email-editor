@@ -124,7 +124,7 @@ class EmailController extends Controller
      */
     public function content(Request $request): string
     {
-        return $this->parseContent($request->input('content'));
+        return $this->parseContent($request->input('content') ?? '');
     }
 
     /**
