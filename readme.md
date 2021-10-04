@@ -62,7 +62,8 @@ Permissions and roles are manageable by default with `sebastienheyd/boilerplate`
 In the editing of the content of an e-mail, you will find a "Insert a variable" button. This button allows you to insert 
 a variable in the e-mail and make it uneditable.
 
-However, you can also enter the variables by hand by framing them with [ and ].
+However, you can also enter the variables by hand by framing them with [ and ]. In this manner, you can also add 
+variables to the subject line of the email.
 
 Example : "Hello [first_name]"
 

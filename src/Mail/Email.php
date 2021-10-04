@@ -20,10 +20,11 @@ class Email extends Mailable
      *
      * @return void
      */
-    public function __construct($id, $data = [])
+    public function __construct($id, $data = [], $subjectData = [])
     {
         $this->id = $id;
         $this->data = $data;
+        $this->subjectData = $subjectData;
     }
 
     /**
@@ -36,7 +37,7 @@ class Email extends Mailable
         $email = EmailModel::findOrFail($this->id);
 
         $this->html($email->render($this->data))
-            ->subject($email->subject)
+            ->subject($email->renderSubject($email->subject, $this->subjectData))
             ->from(
                 $email->sender_email ?? config('mail.from.address'),
                 $email->sender_name ?? config('mail.from.name')
