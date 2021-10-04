@@ -91,6 +91,23 @@ class Email extends Model
     }
 
     /**
+     * Render email subject line.
+     *
+     * @param string $subject
+     * @param array  $data
+     *
+     * @return string
+     */
+    public function renderSubject($subject, $data = [])
+    {
+        foreach ($data as $k => $v) {
+            $subject = str_replace("[$k]", $v, $subject);
+        }
+
+        return $subject;
+    }
+
+    /**
      * Render email content.
      *
      * @param array $data
@@ -176,9 +193,9 @@ class Email extends Model
      * @param string $to
      * @param array  $data
      */
-    public function send($to, $data = [])
+    public function send($to, $data = [], $subjectData = [])
     {
-        $mail = new EmailToSend($this->id, $data);
+        $mail = new EmailToSend($this->id, $data, $subjectData);
         Mail::to($to)->send($mail);
     }
 }
