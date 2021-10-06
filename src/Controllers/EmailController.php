@@ -2,7 +2,6 @@
 
 namespace Sebastienheyd\BoilerplateEmailEditor\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -13,16 +12,8 @@ use Sebastienheyd\BoilerplateEmailEditor\Models\Email;
 use Sebastienheyd\BoilerplateEmailEditor\Models\EmailLayout;
 use Yajra\DataTables\Facades\DataTables;
 
-class EmailController extends Controller
+class EmailController
 {
-    /**
-     * EmailController constructor.
-     */
-    public function __construct()
-    {
-        $this->middleware('ability:admin,emaileditor_email_edition,emaileditor_email_dev');
-    }
-
     /**
      * Display a listing of emails layouts.
      *

@@ -48,6 +48,12 @@ However, you must publish the configuration file in order to do so. To do this, 
 php artisan vendor:publish --provider="Sebastienheyd\BoilerplateEmailEditor\ServiceProvider"
 ```
 
+You can also remove a layout by using the `--remove` option
+
+```
+php artisan email:layout --remove {name}
+```
+
 ## Defining editors
 
 This package is provided with two permissions that can be used depending on the desired profile.

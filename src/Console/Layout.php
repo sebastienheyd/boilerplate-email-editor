@@ -13,7 +13,7 @@ class Layout extends Command
      *
      * @var string
      */
-    protected $signature = 'email:layout {name}';
+    protected $signature = 'email:layout {name : Name of the layout to create} {--remove : Remove the layout file}';
 
     /**
      * The console command description.
@@ -22,13 +22,11 @@ class Layout extends Command
      */
     protected $description = 'Generate a new layout for boilerplate-email-editor';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
+    protected $storage;
+
     public function __construct()
     {
+        $this->storage = Storage::disk('email-layouts');
         parent::__construct();
     }
 
@@ -39,18 +37,36 @@ class Layout extends Command
      */
     public function handle()
     {
+        return $this->option('remove') ? $this->remove() : $this->create();
+    }
+
+    private function remove()
+    {
+        $name = Str::snake($this->argument('name')).'.blade.php';
+
+        if (!$this->storage->exists($name)) {
+            return $this->error('Layout '.$this->storage->path($name).' does not exists');
+        }
+
+        if ($this->confirm('Delete '.$this->storage->path($name).' layout?')) {
+            $this->storage->delete($name);
+            return $this->info('Layout '.$this->storage->path($name).' has been deleted');
+        }
+    }
+
+    private function create()
+    {
         $label = mb_convert_case($this->argument('name'), MB_CASE_TITLE);
         $name = Str::snake($this->argument('name')).'.blade.php';
-        $storage = Storage::disk('email-layouts');
 
-        if ($storage->exists($name)) {
-            return $this->error('Layout '.$storage->path($name).' already exist');
+        if ($this->storage->exists($name)) {
+            return $this->error('Layout '.$this->storage->path($name).' already exist');
         }
 
         $content = "{{-- $label --}}".PHP_EOL;
         $content .= file_get_contents(__DIR__.'/../resources/views/layout/default.blade.php');
-        $storage->put($name, $content);
+        $this->storage->put($name, $content);
 
-        return $this->info('Layout '.$storage->path($name).' has been generated');
+        return $this->info('Layout '.$this->storage->path($name).' has been generated');
     }
 }

@@ -27,11 +27,7 @@ class ServiceProvider extends BaseServiceProvider
 
         // Add console commands
         if ($this->app->runningInConsole()) {
-            $this->commands(
-                [
-                    Console\Layout::class,
-                ]
-            );
+            $this->commands([Console\Layout::class]);
         }
     }
 

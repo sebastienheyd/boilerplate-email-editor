@@ -1,4 +1,10 @@
 .idea/
+.phpunit.result.cache
+testbench/
 vendor/
+src/node_modules
+src/package-lock.json
+vendor
+coverage.clover
 composer.lock
 composer.phar
