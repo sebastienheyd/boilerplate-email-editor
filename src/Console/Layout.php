@@ -50,6 +50,7 @@ class Layout extends Command
 
         if ($this->confirm('Delete '.$this->storage->path($name).' layout?')) {
             $this->storage->delete($name);
+
             return $this->info('Layout '.$this->storage->path($name).' has been deleted');
         }
     }

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'category' => 'E-mails',
+    'category'      => 'E-mails',
     'email_edition' => [
         'display_name' => 'Édition des e-mails',
         'description'  => "Permet l'édition du sujet, de l'expéditeur et du contenu des e-mails",

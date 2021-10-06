@@ -13,7 +13,7 @@ trait TestHelper
      */
     private static function setUpLocalTestbench()
     {
-        if (! file_exists(self::TEST_APP_TEMPLATE)) {
+        if (!file_exists(self::TEST_APP_TEMPLATE)) {
             fwrite(STDOUT, 'Setting up test environment for first use.'.PHP_EOL);
             $files = new Filesystem();
             $files->makeDirectory(self::TEST_APP_TEMPLATE, 0755, true);
@@ -29,7 +29,7 @@ trait TestHelper
             // Pre-install illuminate/support
             $composer['require'] = [
                 'laravel/framework' => '^7.0|^8.0',
-                'laravel/sanctum' => '^7.0|^8.0',
+                'laravel/sanctum'   => '^7.0|^8.0',
             ];
             $composer['require-dev'] = new \StdClass();
 

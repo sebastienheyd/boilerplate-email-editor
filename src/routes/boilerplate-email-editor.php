@@ -7,7 +7,7 @@ $default = [
         'web',
         'boilerplatelocale',
         'boilerplateauth',
-        'ability:admin,emaileditor_email_edition,emaileditor_email_dev'
+        'ability:admin,emaileditor_email_edition,emaileditor_email_dev',
     ],
     'as'         => 'emaileditor.',
     'namespace'  => '\Sebastienheyd\BoilerplateEmailEditor\Controllers',

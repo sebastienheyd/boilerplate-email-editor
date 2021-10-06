@@ -2,8 +2,6 @@
 
 namespace Sebastienheyd\BoilerplateEmailEditor\Tests;
 
-use Collective\Html\FormFacade;
-use Laratrust\LaratrustFacade;
 use Orchestra\Testbench\TestCase as TestBench;
 use Sebastienheyd\Boilerplate\BoilerplateServiceProvider;
 use Sebastienheyd\BoilerplateEmailEditor\ServiceProvider;
