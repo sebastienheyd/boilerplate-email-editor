@@ -2,9 +2,9 @@
 
 return [
     'mailer' => config('mail.default'),
-    'from' => [
+    'from'   => [
         'address' => config('mail.from.address'),
-        'name' => config('mail.from.name'),
+        'name'    => config('mail.from.name'),
     ],
     'layouts_path' => env('EMAIL_LAYOUTS_PATH', resource_path('views/email-layouts')),
 ];

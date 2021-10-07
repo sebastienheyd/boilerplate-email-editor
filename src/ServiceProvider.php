@@ -26,7 +26,7 @@ class ServiceProvider extends BaseServiceProvider
         if ($this->app->runningInConsole()) {
             // Publish files when calling php artisan vendor:publish
             $this->publishes([
-                __DIR__.'/config' => config_path('boilerplate')
+                __DIR__.'/config' => config_path('boilerplate'),
             ], ['email-editor-config']);
 
             $this->publishes([
