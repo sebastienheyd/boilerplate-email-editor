@@ -2,6 +2,7 @@
 
 namespace Sebastienheyd\BoilerplateEmailEditor\Controllers;
 
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -14,6 +15,8 @@ use Yajra\DataTables\Facades\DataTables;
 
 class EmailController
 {
+    use ValidatesRequests;
+
     /**
      * Display a listing of emails layouts.
      *
@@ -81,7 +84,7 @@ class EmailController
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->merge(['content' => $this->parseContent($request->input('content'))]);
+        $request->merge(['content' => $this->parseContent($request->input('content') ?? '')]);
         $request->merge(['layout' => $request->input('layout') == '0' ? null : $request->input('layout')]);
 
         $this->validate(
@@ -196,7 +199,7 @@ class EmailController
      */
     public function update(Request $request, $id): RedirectResponse
     {
-        $request->merge(['content' => $this->parseContent($request->input('content'))]);
+        $request->merge(['content' => $this->parseContent($request->input('content') ?? '')]);
         $request->merge(['layout' => $request->input('layout_id') == '0' ? null : $request->input('layout')]);
 
         $email = Email::findOrFail($id);
@@ -257,8 +260,8 @@ class EmailController
         $to = $request->input('email') ?? $request->user()->email;
 
         $data = [
-            'sender_email' => $request->input('sender_email') ?? config('mail.from.address'),
-            'sender_name'  => $request->input('sender_name') ?? config('mail.from.name'),
+            'sender_email' => $request->input('sender_email') ?? config('boilerplate.email-editor.from.address'),
+            'sender_name'  => $request->input('sender_name') ?? config('boilerplate.email-editor.from.name'),
         ];
 
         $content = $this->parseContent($request->input('content'), $data);
@@ -269,10 +272,9 @@ class EmailController
             $content = (string) view($layout, $data);
         }
 
-        $mail = new Preview($content);
-        $mail->subject($request->input('subject') ?? 'E-mail preview');
+        $mail = (new Preview($content))->subject($request->input('subject') ?? 'E-mail preview');
 
-        Mail::to($to)->send($mail);
+        Mail::mailer(config('boilerplate.email-editor.mailer'))->to($to)->send($mail);
     }
 
     /**
@@ -284,8 +286,14 @@ class EmailController
     {
         $request->session()->flash('content', $request->input('content'));
         $request->session()->flash('layout', $request->input('layout'));
-        $request->session()->flash('sender_email', $request->input('sender_email') ?? config('mail.from.address'));
-        $request->session()->flash('sender_name', $request->input('sender_name') ?? config('mail.from.name'));
+        $request->session()->flash(
+            'sender_email',
+            $request->input('sender_email') ?? config('boilerplate.email-editor.from.address')
+        );
+        $request->session()->flash(
+            'sender_name',
+            $request->input('sender_name') ?? config('boilerplate.email-editor.from.name')
+        );
     }
 
     /**
@@ -340,8 +348,8 @@ class EmailController
         }
 
         $content = [
-            'sender_email' => $request->input('sender_email') ?? config('mail.from.address'),
-            'sender_name'  => $request->input('sender_name') ?? config('mail.from.name'),
+            'sender_email' => $request->input('sender_email') ?? config('boilerplate.email-editor.from.address'),
+            'sender_name'  => $request->input('sender_name') ?? config('boilerplate.email-editor.from.name'),
             'content'      => sprintf('<div id="mceEditableContent" contenteditable="true">%s</div>', $content),
         ];
 

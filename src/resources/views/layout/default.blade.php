@@ -6,7 +6,7 @@
     <title>{{ config('app.name') }}</title>
     <style type="text/css">
         #outlook a {padding:0}
-        body{width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;margin:0;padding:0;background:#efefef;font-family:Arial,Verdana,sans-serif}
+        body {width:100% !important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;margin:0;padding:0;background:#efefef;font-family:Arial,Verdana,sans-serif}
         #backgroundTable {margin:0;padding:0;width:100% !important;line-height:100% !important}
         img {outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;max-width:100%;height:auto}
         a img {border:none}
@@ -22,7 +22,7 @@
         .logo {font-size:24px;font-weight:bold;text-decoration:none;color:#0d6aad}
         .content {padding:0 15px 15px 15px;color:#333;font-size:16px;line-height:22px}
         @media only screen and (max-device-width: 480px) {
-            .container { width:100% !important;padding-right:10px;padding-left:10px}
+            .container {width:100% !important;padding-right:10px;padding-left:10px}
         }
     </style>
 </head>
@@ -34,7 +34,7 @@
                 <tr>
                     <td class="mentions">
                         <small>
-                            {!! __('boilerplate-email-editor::email.intro', ['email' => $sender_email ?? config('mail.from.address')]) !!}
+                            {!! __('boilerplate-email-editor::email.intro', ['email' => $sender_email ?? config('boilerplate.email-editor.from.address')]) !!}
                         </small>
                     </td>
                 </tr>

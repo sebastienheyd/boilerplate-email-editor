@@ -18,8 +18,8 @@
         <div class="col-md-4">
             @component('boilerplate::card', ['color' => 'success', 'title' => __('boilerplate-email-editor::email.header')])
                 @component('boilerplate::input', ['name' => 'subject', 'value' => $email->subject ?? '', 'label' => __('boilerplate-email-editor::email.Subject'), 'group-class' => 'required'])@endcomponent()
-                @component('boilerplate::input', ['name' => 'sender_name', 'value' => $email->sender_name ?? '', 'label' => __('boilerplate-email-editor::email.Sender_name'), 'placeholder' => config('mail.from.name'), 'help' => __('boilerplate-email-editor::email.ifNameEmpty')])@endcomponent()
-                @component('boilerplate::input', ['name' => 'sender_email', 'value' => $email->sender_email ?? '', 'label' => __('boilerplate-email-editor::email.Sender_email'), 'placeholder' => config('mail.from.address'), 'help' => __('boilerplate-email-editor::email.ifAdressEmpty')])@endcomponent()
+                @component('boilerplate::input', ['name' => 'sender_name', 'value' => $email->sender_name ?? '', 'label' => __('boilerplate-email-editor::email.Sender_name'), 'placeholder' => config('boilerplate.email-editor.from.name'), 'help' => __('boilerplate-email-editor::email.ifNameEmpty')])@endcomponent()
+                @component('boilerplate::input', ['name' => 'sender_email', 'value' => $email->sender_email ?? '', 'label' => __('boilerplate-email-editor::email.Sender_email'), 'placeholder' => config('boilerplate.email-editor.from.address'), 'help' => __('boilerplate-email-editor::email.ifAdressEmpty')])@endcomponent()
             @endcomponent
 
             @ability('admin', 'emaileditor_email_dev')

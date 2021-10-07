@@ -22,11 +22,17 @@ class ServiceProvider extends BaseServiceProvider
         $this->loadViewsFrom(__DIR__.'/resources/views', 'boilerplate-email-editor');
         $this->loadTranslationsFrom(__DIR__.'/resources/lang', 'boilerplate-email-editor');
 
-        // Publish configuration
-        $this->publishes([__DIR__.'/config' => config_path('boilerplate')], 'config');
-
         // Add console commands
         if ($this->app->runningInConsole()) {
+            // Publish files when calling php artisan vendor:publish
+            $this->publishes([
+                __DIR__.'/config' => config_path('boilerplate')
+            ], ['email-editor-config']);
+
+            $this->publishes([
+                __DIR__.'/resources/views/layout' => resource_path('views/vendor/boilerplate-email-editor/layout'),
+            ], 'email-editor-layout');
+
             $this->commands([Console\Layout::class]);
         }
     }

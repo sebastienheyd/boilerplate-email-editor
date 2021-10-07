@@ -39,8 +39,8 @@ class Email extends Mailable
         $this->html($email->render($this->data))
             ->subject($email->renderSubject($email->subject, $this->subjectData))
             ->from(
-                $email->sender_email ?? config('mail.from.address'),
-                $email->sender_name ?? config('mail.from.name')
+                $email->sender_email ?? config('boilerplate.email-editor.from.address'),
+                $email->sender_name ?? config('boilerplate.email-editor.from.name')
             );
 
         return $this;

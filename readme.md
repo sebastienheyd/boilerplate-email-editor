@@ -1,4 +1,4 @@
-# Laravel Boilerplate E-mail Editor
+# E-mail editor for [sebastienheyd/boilerplate](https://github.com/sebastienheyd/boilerplate)
 
 [![Packagist](https://img.shields.io/packagist/v/sebastienheyd/boilerplate-email-editor.svg?style=flat-square)](https://packagist.org/packages/sebastienheyd/boilerplate-email-editor)
 [![Build Status](https://scrutinizer-ci.com/g/sebastienheyd/boilerplate-email-editor/badges/build.png?b=master)](https://scrutinizer-ci.com/g/sebastienheyd/boilerplate-email-editor/build-status/master)
@@ -28,9 +28,23 @@ php artisan migrate
 
 You can go to the admin and start using the email management panel.
 
-## Generating an email layout
+__Optional__ : publish configuration file 
 
-Before generating a layout, be aware that there is a default html layout provided with this package.
+```
+php artisan vendor:publish --tag=email-editor-config
+```
+
+## Modify the default HTML layout
+
+To edit the default HTML layout, you can use the following command
+
+```
+php artisan vendor:publish --tag=email-editor-layout
+```
+
+You will find the layout in `/resources/views/vendor/boilerplate-email-editor/layout`
+
+## Generating a new email layout
 
 To generate a new layout, you can use the following artisan command :
 
@@ -45,7 +59,7 @@ To change the default folder, change the value of `layouts_path` in the `email-e
 However, you must publish the configuration file in order to do so. To do this, use the following command:
 
 ```
-php artisan vendor:publish --provider="Sebastienheyd\BoilerplateEmailEditor\ServiceProvider"
+php artisan vendor:publish --tag=email-editor-config
 ```
 
 You can also remove a layout by using the `--remove` option
@@ -88,6 +102,17 @@ Email::findBySlug('my_slug')->send('email@tld.com', $data);
 Email::find(1)->send('email@tld.com', $data);
 ```
 
-## Package update
+## Tests / Coding standards
 
-Version 7 has undergone a major upgrade, do not upgrade to this version without knowing what you are doing.
+This package is delivered with a `Makefile` used to launch checks for the respect of coding standards and the unit tests
+
+Just call `make` to see the list of commands.
+
+## Credits
+
+- [Sébastien HEYD](https://github.com/sebastienheyd)
+- [All Contributors](https://github.com/sebastienheyd/boilerplate/contributors)
+
+## License
+
+This package is free software distributed under the terms of the [MIT license](license.md).

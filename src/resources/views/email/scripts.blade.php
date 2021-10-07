@@ -86,8 +86,8 @@
                 relative_urls: false,
                 convert_urls: false,
                 verify_html: false,
-                toolbar1: tinymce.defaultSettings.toolbar,
-                toolbar2: 'insertVar',
+                toolbar1: "undo redo | styleselect | forecolor | bold italic underline | customalignleft aligncenter customalignright | bullist numlist | table | link media image",
+                toolbar2: "insertVar",
                 table_toolbar: '',
                 link_class_list: [
                     {title: '-', value: ''},

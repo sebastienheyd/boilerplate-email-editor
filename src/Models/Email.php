@@ -117,10 +117,8 @@ class Email extends Model
     public function render($data = [])
     {
         $data = $data + [
-            'sender_name'  => $data['sender_name'] ?? $this->getAttribute('sender_name') ?? config('mail.from.name'),
-            'sender_email' => $data['sender_email'] ?? $this->getAttribute('sender_email') ?? config(
-                'mail.from.address'
-            ),
+            'sender_name'  => $data['sender_name'] ?? $this->getAttribute('sender_name') ?? config('boilerplate.email-editor.from.name'),
+            'sender_email' => $data['sender_email'] ?? $this->getAttribute('sender_email') ?? config('boilerplate.email-editor.from.address'),
         ];
 
         $content = $this->getAttribute('content');
@@ -196,6 +194,6 @@ class Email extends Model
     public function send($to, $data = [], $subjectData = [])
     {
         $mail = new EmailToSend($this->id, $data, $subjectData);
-        Mail::to($to)->send($mail);
+        Mail::mailer(config('boilerplate.email-editor.mailer'))->to($to)->send($mail);
     }
 }

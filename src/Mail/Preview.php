@@ -57,6 +57,10 @@ class Preview extends Mailable
      */
     public function build()
     {
-        return $this->html($this->content);
+        return $this->html($this->content)
+            ->from(
+                $email->sender_email ?? config('boilerplate.email-editor.from.address'),
+                $email->sender_name ?? config('boilerplate.email-editor.from.name')
+            );
     }
 }
