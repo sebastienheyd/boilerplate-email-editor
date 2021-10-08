@@ -37,20 +37,22 @@
 @include('boilerplate::load.datatables')
 
 @push('js')
+@component('boilerplate::minify')
     <script>
         $(function () {
             oTable = $('#emails-table').DataTable({
                 processing: false,
                 serverSide: true,
+                stateSave: true,
                 ajax: {
                     url: '{!! route('emaileditor.email.datatable') !!}',
                     type: 'post',
                 },
                 columns: [
-                    {data: 'id', name: 'id', width: '70px', visible: false, searchable: false},
-                    {data: 'slug', name: 'slug', width: '120px'},
-                    {data: 'subject', name: 'subject', width: '120px'},
-                    {data: 'description', name: 'description', searchable: true},
+                    {data: 'id', name: 'id', width: '70px', searchable: false},
+                    {data: 'slug', name: 'slug'},
+                    {data: 'subject', name: 'subject', orderable: false},
+                    {data: 'description', name: 'description', searchable: true, orderable: false},
                     {data: 'actions', name: 'actions', orderable: false, searchable: false, width: '140px', class: "visible-on-hover"}
                 ]
             });
@@ -60,7 +62,6 @@
 
                 var href = $(this).attr('href');
 
-                // todo traduction
                 bootbox.confirm("{{ __('boilerplate-email-editor::email.delete') }}", function (result) {
                     if (result === false) {
                         return;
@@ -78,4 +79,5 @@
             });
         });
     </script>
+@endcomponent
 @endpush
