@@ -154,7 +154,8 @@ class EmailController extends Controller
             };
 
             $content = $innerHtml($html->getElementById('mceEditableContent'));
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
 
         return trim(urldecode($content));
     }
