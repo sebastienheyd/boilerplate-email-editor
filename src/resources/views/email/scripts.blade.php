@@ -138,7 +138,7 @@
                         content = $(content).find('#mceEditableContent').html()
                     }
 
-                    codeMirror = $('#tab-code textarea').val(content.trim()).codemirror();
+                    codeMirror = $('#tab-code textarea').val(content.replace(/<(\/p|br)>/g, "<$1>\r").trim()).codemirror();
                 } else {
                     loadLayout(codeMirror.getValue());
                 }

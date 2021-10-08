@@ -2,25 +2,30 @@
 
 namespace Sebastienheyd\BoilerplateEmailEditor\Controllers;
 
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use App\Http\Controllers\Controller;
+use DOMDocument;
+use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Mail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\ValidationException;
 use Sebastienheyd\BoilerplateEmailEditor\Mail\Preview;
 use Sebastienheyd\BoilerplateEmailEditor\Models\Email;
 use Sebastienheyd\BoilerplateEmailEditor\Models\EmailLayout;
 use Yajra\DataTables\Facades\DataTables;
 
-class EmailController
+class EmailController extends Controller
 {
-    use ValidatesRequests;
-
     /**
      * Display a listing of emails layouts.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -30,7 +35,7 @@ class EmailController
     /**
      * Get listing of emails for datatable.
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return mixed
      */
@@ -61,7 +66,7 @@ class EmailController
      *
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function create(Request $request)
     {
@@ -140,7 +145,7 @@ class EmailController
             }
         }
 
-        $html = new \DOMDocument('1.0', 'utf-8');
+        $html = new DOMDocument('1.0', 'utf-8');
         @$html->loadHTML($content);
 
         try {
@@ -149,26 +154,21 @@ class EmailController
             };
 
             $content = $innerHtml($html->getElementById('mceEditableContent'));
-        } catch (\Exception $e) {
-        }
+        } catch (Exception $e) {}
 
-        $content = urldecode($content);
-
-        return trim($content);
+        return trim(urldecode($content));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param Email $email
      *
      * @return Response
      */
-    public function show($id): Response
+    public function show(Email $email): Response
     {
-        $content = Email::find($id)->render([], false);
-
-        return response($content, 200)->header('Content-Type', 'text/html');
+        return response($email->render([]), 200)->header('Content-Type', 'text/html');
     }
 
     /**
@@ -177,7 +177,7 @@ class EmailController
      * @param Email   $email
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function edit(Email $email, Request $request)
     {
@@ -190,19 +190,18 @@ class EmailController
     /**
      * Update email layout in database.
      *
+     * @param Email   $email
      * @param Request $request
-     * @param int     $id
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      *
      * @return RedirectResponse
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(Email $email, Request $request): RedirectResponse
     {
         $request->merge(['content' => $this->parseContent($request->input('content') ?? '')]);
         $request->merge(['layout' => $request->input('layout_id') == '0' ? null : $request->input('layout')]);
 
-        $email = Email::findOrFail($id);
         $data = $request->all();
 
         // By security
@@ -218,7 +217,7 @@ class EmailController
                 'subject'      => 'required',
                 'content'      => 'required',
                 'sender_email' => 'nullable|email',
-                'slug'         => 'required|unique:emails,slug,'.$id,
+                'slug'         => 'required|unique:emails,slug,'.$email->id,
             ],
             [],
             [
@@ -237,15 +236,15 @@ class EmailController
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param Email $email
      */
-    public function destroy($id)
+    public function destroy(Email $email)
     {
         if (!Auth::user()->ability('admin', 'emaileditor_email_dev')) {
             abort(403);
         }
 
-        Email::destroy($id);
+        $email->delete();
     }
 
     /**
@@ -253,7 +252,7 @@ class EmailController
      *
      * @param Request $request
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function previewEmail(Request $request)
     {
@@ -301,9 +300,7 @@ class EmailController
      *
      * @param Request $request
      *
-     * @throws \Exception
-     *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|Response
+     * @return Application|ResponseFactory|Factory|View|Response
      */
     public function preview(Request $request)
     {
