@@ -203,14 +203,16 @@ class EmailController extends Controller
         $request->merge(['content' => $this->parseContent($request->input('content') ?? '')]);
         $request->merge(['layout' => $request->input('layout_id') == '0' ? null : $request->input('layout')]);
 
-        $data = $request->all();
-
         // By security
         if (!Auth::user()->ability('admin', 'emaileditor_email_dev')) {
-            $data['description'] = $email->description;
-            $data['slug'] = $email->slug;
-            $data['layout'] = $email->layout;
+            $request->merge([
+                'description' => $email->description,
+                'slug' => $email->slug,
+                'layout' => $email->layout,
+            ]);
         }
+
+        $data = $request->all();
 
         $this->validate(
             $request,

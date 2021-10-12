@@ -32,7 +32,7 @@ class Email extends Model
      *
      * @param $slug
      *
-     * @return mixed
+     * @return self
      */
     public static function findBySlug($slug)
     {
