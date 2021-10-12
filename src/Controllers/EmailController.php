@@ -207,8 +207,8 @@ class EmailController extends Controller
         if (!Auth::user()->ability('admin', 'emaileditor_email_dev')) {
             $request->merge([
                 'description' => $email->description,
-                'slug' => $email->slug,
-                'layout' => $email->layout,
+                'slug'        => $email->slug,
+                'layout'      => $email->layout,
             ]);
         }
 
