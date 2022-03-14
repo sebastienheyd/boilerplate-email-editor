@@ -31,7 +31,7 @@ trait TestHelper
                 'laravel/framework' => '^7.0|^8.0',
                 'laravel/sanctum'   => '^7.0|^8.0',
             ];
-            $composer['require-dev'] = new \StdClass();
+            $composer['require-dev'] = new \stdClass();
 
             // Install stable version
             $composer['minimum-stability'] = 'dev';
