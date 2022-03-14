@@ -11,7 +11,8 @@
                     url: '{{ route('emaileditor.email.content') }}',
                     type: 'post',
                     data: {
-                        content: $("#content").tinymce().getContent()
+                        content: $("#content").tinymce().getContent(),
+                        layout: $('[name=layout]').val(),
                     },
                     success: (text) => {
                         $('#content').html(text);

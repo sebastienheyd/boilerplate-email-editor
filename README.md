@@ -4,7 +4,7 @@
 [![Build Status](https://scrutinizer-ci.com/g/sebastienheyd/boilerplate-email-editor/badges/build.png?b=master)](https://scrutinizer-ci.com/g/sebastienheyd/boilerplate-email-editor/build-status/master)
 [![StyleCI](https://github.styleci.io/repos/170875496/shield?branch=master)](https://github.styleci.io/repos/170875496)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sebastienheyd/boilerplate-email-editor/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sebastienheyd/boilerplate-email-editor/?branch=master)
-![Laravel](https://img.shields.io/badge/Laravel-6.x%20→%208.x-green?logo=Laravel&style=flat-square)
+![Laravel](https://img.shields.io/badge/Laravel-6.x%20→%209.x-green?logo=Laravel&style=flat-square)
 [![Nb downloads](https://img.shields.io/packagist/dt/sebastienheyd/boilerplate-email-editor.svg?style=flat-square)](https://packagist.org/packages/sebastienheyd/boilerplate-email-editor)
 [![MIT License](https://img.shields.io/github/license/sebastienheyd/boilerplate.svg)](license.md)
 

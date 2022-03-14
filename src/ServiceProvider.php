@@ -27,7 +27,7 @@ class ServiceProvider extends BaseServiceProvider
             // Publish files when calling php artisan vendor:publish
             $this->publishes([
                 __DIR__.'/config' => config_path('boilerplate'),
-            ], ['email-editor-config']);
+            ], ['boilerplate', 'email-editor-config']);
 
             $this->publishes([
                 __DIR__.'/resources/views/layout' => resource_path('views/vendor/boilerplate-email-editor/layout'),

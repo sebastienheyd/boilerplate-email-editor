@@ -145,6 +145,10 @@ class EmailController extends Controller
             }
         }
 
+        if ($content === '') {
+            return $content;
+        }
+
         $html = new DOMDocument('1.0', 'utf-8');
         @$html->loadHTML($content);
 
